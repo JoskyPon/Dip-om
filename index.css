@@ -1,0 +1,144 @@
+@font-face {
+    font-family: 'Modern';
+    src: local('Modern Light'),
+        url('fonts/CMUTypewriter-Light.woff2') format('woff2'),
+        url('fonts/CMUTypewriter-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Modern';
+    src: local('Modern Regular'),
+        url('fonts/CMUTypewriter-Regular.woff2') format('woff2'),
+        url('fonts/CMUTypewriter-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Modern';
+    src: local('Modern Italic'),
+        url('fonts/CMUTypewriter-Italic.woff2') format('woff2'),
+        url('fonts/CMUTypewriter-Italic.woff') format('woff');
+    font-weight: 450;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Modern';
+    src: local('Modern Bold'),
+        url('fonts/CMUConcrete-Bold.woff2') format('woff2'),
+        url('fonts/CMUConcrete-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    font-size: 0;
+}
+
+header {
+    background-color: #070E0C;
+}
+
+
+
+
+
+.flex {
+    display: flex;
+}
+
+.header__container {
+    justify-content: space-between;
+    padding: 20px 30px;
+}
+
+.header__nav {
+    gap: 30px;
+}
+
+.header__link {
+    font-family: 'Modern';
+    font-weight: 800;
+    font-size: 16px;
+    color: #FAFAFA;
+    text-decoration: none;
+}
+
+.hero {
+    padding: 30px;
+    align-items: center;
+    background-color: #717070;
+}
+
+.hero__container {
+    max-width: 600px;
+}
+
+.hero__title {
+    font-family: 'Modern';
+    font-weight: 700;
+    font-size: 28px;
+    color: #FAFAFA;
+}
+
+.hero__descr {
+    font-family: 'Modern';
+    font-weight: 400;
+    font-size: 16px;
+    color: #FAFAFA;
+}
+
+.about-us {
+    padding: 30px;
+    background-color: #070E0C;
+}
+
+.about-us__container {
+    justify-content: space-between;
+}
+
+.about-us__title {
+    font-family: 'Modern';
+    font-weight: 400;
+    font-size: 24px;
+    color: #FAFAFA;
+}
+
+.about-us__descr {
+    font-family: 'Modern';
+    font-weight: 400;
+    font-size: 18px;
+    color: #FAFAFA;
+}
+
+.about-us__text {
+    max-width: 60%;
+}
+
+.services {
+    padding: 30px;
+    background-color: #EBE6DE;
+}
+
+.services__container {
+    align-items: center;
+    flex-direction: column;
+}
+
+.services__title {
+    font-family: 'Modern';
+    font-weight: 400;
+    font-size: 18px;
+    color: #8D816F;
+}
+
+.services__descr {
+    font-family: 'Modern';
+    font-weight: 400;
+    font-size: 18px;
+    color: #070E0C;
+}
