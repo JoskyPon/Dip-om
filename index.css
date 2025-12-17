@@ -83,7 +83,7 @@ header {
     width: 100%;
 }
 
-.hero__container > svg {
+.hero__container>svg {
     padding-left: 50px;
     width: 80px;
     height: 80px;
@@ -110,10 +110,10 @@ header {
     color: #FAFAFA;
 }
 
-.hero__buttons {
-}
+.hero__buttons {}
 
-.hero__btn-1, .hero__btn-2 {
+.hero__btn-1,
+.hero__btn-2 {
     padding: 7px 20px;
     margin: 0;
     width: 102px;
@@ -131,8 +131,7 @@ header {
     background-color: rgb(190, 169, 144);
 }
 
-.hero__btn-2 {
-}
+.hero__btn-2 {}
 
 .about-us {
     justify-content: center;
@@ -178,7 +177,7 @@ header {
 }
 
 .services {
-    padding: 30px;
+    padding: 80px;
     background-color: #EBE6DE;
 }
 
@@ -202,6 +201,7 @@ header {
 
 .services__descr {
     margin: 0;
+    text-align: center;
     margin-bottom: 50px;
     font-family: 'Marxiana';
     font-weight: 400;
@@ -220,11 +220,11 @@ header {
     align-items: center;
     text-align: center;
     max-width: 400px;
-    background-color: #fafafa;
+    background-color: #8D816F;
 }
 
 .services__block__text {
-    padding: 30px 30px 0 30px;
+    padding: 30px 40px 0 40px;
     margin-bottom: 30px;
 }
 
@@ -232,12 +232,17 @@ header {
     margin-bottom: 30px;
 }
 
+.services__block__text {
+    max-width: 320px;
+}
+
 .services__block__title {
     margin: 0;
+    margin-bottom: 20px;
     font-family: 'Marxiana';
     font-weight: 400;
-    font-size: 18px;
-    color: #8D816F;
+    font-size: 32px;
+    color: rgb(255, 255, 255);
 }
 
 .services__block__descr {
@@ -245,14 +250,40 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: #070E0C;
+    color: rgb(255, 255, 255);
+}
+
+.services__block__links {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.services__block__link {
+    margin: 0;
+    margin-right: 5px;
+    align-items: center;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    line-height: 20px;
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+}
+
+.services__block__links>svg {
+    width: 24px;
+    height: 24px;
+    fill: rgb(255, 255, 255);
+
 }
 
 .ribbon__container {
     flex-wrap: nowrap;
     overflow: hidden;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 
 .ribbon__descr {
@@ -292,8 +323,8 @@ header {
 }
 
 .reviews {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 80px;
+    padding-bottom: 80px;
     background-color: #EBE6DE;
 }
 
@@ -307,25 +338,27 @@ header {
 
 .reviews__title {
     margin: 0;
+    margin-bottom: 20px;
     font-family: 'Marxiana';
     font-weight: 400;
-    font-size: 18px;
-    color: #8D816F;
+    font-size: 42px;
+    color: rgb(7, 14, 12);
 }
 
 .reviews__descr {
     margin: 0;
+    margin-bottom: 50px;
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: #070E0C;
+    color: rgb(72, 72, 72);
 }
 
 .reviews__blocks {
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
+    gap: 40px;
     max-width: 1600px;
-    padding-left: 145px;
 }
 
 .reviews__block {
@@ -335,6 +368,9 @@ header {
 
 .reviews__block__text {
     flex-direction: column;
+    padding: 40px 30px 0 30px;
+    margin-bottom: 40px;
+    min-height: 145px;
 }
 
 .reviews__block__descr {
@@ -342,44 +378,57 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: #070E0C;
+    color: rgb(72, 72, 72);
 }
 
 .client {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .client__name {
     margin: 0;
+    margin-right: 20px;
     font-family: 'Marxiana';
     font-weight: 700;
-    font-size: 18px;
-    color: #070E0C;
+    font-size: 20px;
+    color: rgb(7, 14, 12);
+}
+
+.client__photo {
+    width: 40px;
+    height: 40px;
 }
 
 .footer {
+    padding: 80px 40px;
     background-color: #070E0C;
 }
 
-.info__decor > svg > path {
+.info__decor>svg>path {
     fill: #fff;
 }
 
 .info__name {
     margin: 0;
     font-family: 'Marxiana';
-    font-weight: 400;
-    font-size: 18px;
-    color: #8D816F;
+    font-weight: 700;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
 }
 
-.info__email, .info__phone, .info__adress {
+.info__email,
+.info__phone,
+.info__adress {
     margin: 0;
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: #8D816F;
+    color: rgb(255, 255, 255);
     text-decoration: none;
 }
 
