@@ -1,0 +1,51 @@
+
+
+.calculated {
+    padding: 80px;
+    background-color: #EBE6DE;
+}
+
+.calculated__text {
+    margin-bottom: 10px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: rgb(7, 14, 12);
+}
+
+.calculated__descr {
+    margin-right: 100px;
+    max-width: 60%;
+}
+
+.calculated__formula {
+    margin-bottom: 10px;
+    font-family: 'Marxiana';
+    font-weight: 700;
+    font-size: 18px;
+    color: rgb(7, 14, 12);
+}
+
+.calculated__title {
+    margin-bottom: 50px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 30px;
+    color: rgb(141, 129, 111);
+}
+
+.calculated__block {
+    flex-direction: column;
+    gap: 30px;
+    padding-top: 110px;
+}
+
+.calculated__input {
+    padding: 10px 30px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: rgb(7, 14, 12);
+    border-radius: 10px;
+    border: 1px solid rgb(141, 129, 111);
+}
