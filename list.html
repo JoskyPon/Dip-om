@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="list.css">
     <link rel="stylesheet" href="media.css">
+    <link rel="stylesheet" href="list-media.css">
     <link rel="stylesheet" href="index.js">
 </head>
 
@@ -28,7 +29,7 @@
                 </svg>
             </a>
             <nav class="header__nav flex">
-                <a href="#about-us" class="header__link">О&nbsp;нас</a>
+                <a href="index.html" class="header__link">О&nbsp;нас</a>
                 <a href="#services" class="header__link">Услуги</a>
                 <a href="#footer" class="header__link">Контакты</a>
                 <a href="#" class="header__link">Личный кабинет</a>
@@ -38,9 +39,9 @@
     <section id="services" class="services">
         <div class="services__container flex">
             <div class="services__text flex">
-                <h2 class="services__title">Предлагаемые услуги</h2>
-                <p class="services__descr">Откройте для себя персонализированные страховые решения для вашей уверенности
-                    и спокойствия с <br> АвтоСтрах.</p>
+                <h1 class="services__title">Предлагаемые варианты страхования</h1>
+                <p class="services__descr">Мы защищаем не только вашу машину, но и ваше спокойствие на дороге. Выберите
+                    пакет, который подходит именно вам.</p>
             </div>
             <div class="services__blocks flex">
                 <div class="services__block flex">
@@ -88,29 +89,32 @@
         <h2 class="calculated__title">От чего зависит цена</h2>
         <div class="calculated__container flex">
             <div class="calculated__descr">
-                <p class="calcilated__text">При расчете цены страховки учитываются базовые тарифы и различные
+                <p class="calculated__text">При расчете цены страховки учитываются базовые тарифы и различные
                     коэффициенты по формуле:</p>
                 <p class="calculated__formula">Цена = Базовый тариф × КТ x КБМ x КВС x КО x КМ x КС (КП).</p>
-                <p class="calculated__text">Базовый тариф — в компании автострах он составляет 4500₽</p>
-                <p class="calculated__text">КТ — регион собственника автомобиля Стоимость полиса ОСАГО зависит от города
+                <!--<p class="calculated__text">Базовый тариф — в компании автострах он составляет 4500₽</p>-->
+                <p class="calculated__text">КТ — регион собственника автомобиля. Стоимость полиса ОСАГО зависит от
+                    города
                     регистрации (прописки) собственника автомобиля. Место регистрации самого автомобиля на цену полиса
                     не влияет.</p>
-                <p class="calculated__text">КБМ — коэффициент бонус-малус
+                <p class="calculated__text">КБМ — коэффициент бонус-малус.
                     Коэффициент бонус-малус (КБМ) зависит от аккуратности вождения: чем меньше вы становитесь виновником
                     ДТП, тем дешевле ваш полис. Скидка или надбавка по КБМ накапливается с годами: каждый год можно
                     уменьшить или увеличить свой коэффициент.</p>
-                <p class="calculated__text">КВС — возраст и стаж водителя
+                <p class="calculated__text">КВС — возраст и стаж водителя.
                     Коэффициент возраст-стаж (КВС) делает полис дешевле для опытных водителей. Молодые люди без опыта
                     вождения платят больше, а опытным водителям в возрасте дают скидку.</p>
-                <p class="calculated__text">КО — количество водителей
+                <p class="calculated__text">КО — количество водителей.
                     Есть два вида полисов: с ограничением количества водителей и без (мультидрайв). В обычный полис
                     нужно вписывать всех водителей, а автомобилем с мультидрайвом может управлять любой водитель с
                     правами.</p>
-                <p class="calculated__text">КМ — мощность двигателя
+                <p class="calculated__text">КМ — мощность двигателя.
                     Коэффициент КМ делает полис дороже для более мощных автомобилей.</p>
-                <p class="calculated__text">КС — полис на короткий срок
+                <p class="calculated__text">КС — полис на короткий срок.
                     Коэффициент сезонности (КС) делает полис дешевле для тех, кто пользуется автомобилем несколько
                     месяцев в году.</p>
+                <p class="calculated__cost">Примерная стоимость полиса ОСАГО: </p>
+                <p class="calculated__cost">Примерная стоимость полиса КАСКО: </p>
             </div>
             <div class="calculated__block flex">
                 <input type="text" placeholder="КТ" class="calculated__input input-KT">
@@ -119,9 +123,57 @@
                 <input type="text" placeholder="КО" class="calculated__input input-KO">
                 <input type="text" placeholder="КМ" class="calculated__input input-KM">
                 <input type="text" placeholder="КС" class="calculated__input input-KS">
+                <input type="text" placeholder="Оценочная стоимость автомобиля" class="calculated__input input-COST">
+                <button class="calculated__button">Рассчитать стоимость</button>
             </div>
         </div>
     </section>
+    <footer id="footer" class="footer">
+        <div class="footer__container flex">
+            <div class="footer__container__left">
+                <ul class="footer__info info">
+                    <li class="info__list">
+                        <p class="info__name">Email</p>
+                        <a href="mailto:podg.sanek@gmaol.com" class="info__email">
+                            podg.sanek@gmail.com
+                        </a>
+                    </li>
+                    <li class="info__list">
+                        <p class="info__name">Телефон</p>
+                        <a href="tel:+79054123899" class="info__phone">
+                            +7 (905) 412 38 99
+                        </a>
+                    </li>
+                    <li class="info__list">
+                        <p class="info__name">Адрес</p>
+                        <p href="" class="info__adress">
+                            Ставропольский край, с. Левокумское, ул. Калинина, д. 105
+                        </p>
+                    </li>
+                </ul>
+                <span class="info__decor">
+                </span>
+                <span class="info__icon">
+                    <svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M30.02 15.612l-11.536 3.41-3.391 11.997L11.67 19.03.02 15.538l11.644-3.522L15.053.019l3.422 11.988 11.545 3.605z"
+                            fill="#000"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="footer__container__right">
+                <nav class="footer__nav flex">
+                    <a href="index.html" class="footer__nav__link">О нас</a>
+                    <a href="#services" class="footer__nav__link">Услуги</a>
+                    <a href="#footer" class="footer__nav__link">Контакты</a>
+                </nav>
+            </div>
+        </div>
+        <p class="info__descr">Мы будем рады видеть вас в числе наших клиентов.</p>
+        <p class="footer__rr">
+            © Все права защищены. АвтоСтрах
+        </p>
+    </footer>
 </body>
 
 </html>

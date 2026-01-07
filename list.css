@@ -5,7 +5,14 @@
     background-color: #EBE6DE;
 }
 
+.calculated__container {
+    justify-content: space-between;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
 .calculated__text {
+    margin: 0;
     margin-bottom: 10px;
     font-family: 'Marxiana';
     font-weight: 400;
@@ -14,11 +21,16 @@
 }
 
 .calculated__descr {
+    padding: 20px;
+    padding-bottom: 40px;
     margin-right: 100px;
     max-width: 60%;
+    background-color: rgb(7, 14, 12, 0.05);
+    border-radius: 20px;
 }
 
 .calculated__formula {
+    margin: 0;
     margin-bottom: 10px;
     font-family: 'Marxiana';
     font-weight: 700;
@@ -27,17 +39,29 @@
 }
 
 .calculated__title {
-    margin-bottom: 50px;
+    margin: 0;
+    padding-left: 100px;
+    margin-bottom: 40px;
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 30px;
     color: rgb(141, 129, 111);
 }
+.calculated__cost {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: rgb(7, 14, 12);
+}
 
 .calculated__block {
     flex-direction: column;
-    gap: 30px;
-    padding-top: 110px;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .calculated__input {
@@ -48,4 +72,45 @@
     color: rgb(7, 14, 12);
     border-radius: 10px;
     border: 1px solid rgb(141, 129, 111);
+    transition: background-color 0.3s ease-in-out;
+}
+
+.calculated__input:hover {
+    background-color: rgb(7, 14, 12, 0.05);
+}
+
+.calculated__input:focus {
+    outline: 1px solid rgb(141, 129, 111);
+}
+
+.calculated__input:active {
+    background-color: rgb(141, 129, 111);
+}
+
+.calculated__button {
+    padding: 10px 30px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: rgb(7, 14, 12);
+    background-color: rgb(190, 169, 144);
+    border-radius: 10px;
+    border: 1px solid rgb(141, 129, 111);
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.calculated__button:hover {
+        background-color: rgb(141, 129, 111);
+
+}
+
+.calculated__button:focus {
+        border-color: rgb(113, 112, 112)
+
+}
+
+.calculated__button:active {
+        background-color: rgb(113, 112, 112);
+
 }
