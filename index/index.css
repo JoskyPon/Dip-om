@@ -500,6 +500,22 @@ header {
     font-size: 18px;
     color: rgb(255, 255, 255);
     text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.info__email:hover,
+.info__phone:hover {
+    color: rgb(190, 169, 144);
+}
+
+.info__email:focus,
+.info__phone:focus {
+    color: rgb(190, 169, 144);
+}
+
+.info__email:active,
+.info__phone:active {
+    color: rgb(141, 129, 111);
 }
 
 .info__descr {
