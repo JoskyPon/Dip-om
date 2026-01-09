@@ -102,15 +102,12 @@
 
 .calculated__button:hover {
         background-color: rgb(141, 129, 111);
-
 }
 
 .calculated__button:focus {
         border-color: rgb(113, 112, 112)
-
 }
 
 .calculated__button:active {
         background-color: rgb(113, 112, 112);
-
 }

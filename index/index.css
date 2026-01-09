@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Marxiana';
     src: local('Marxiana Light'),
-        url('fonts/TTMarxiana-Elzevir.woff2') format('woff2'),
-        url('fonts/TTMarxiana-Elzevir.woff') format('woff');
+        url('../fonts/TTMarxiana-Elzevir.woff2') format('woff2'),
+        url('../fonts/TTMarxiana-Elzevir.woff') format('woff');
     font-weight: 300;
     font-style: normal;
 }
@@ -10,8 +10,8 @@
 @font-face {
     font-family: 'Marxiana';
     src: local('Marxiana Regular'),
-        url('fonts/TTMarxiana-Antiqua.woff2') format('woff2'),
-        url('fonts/TTMarxiana-AntiquaItalic.woff') format('woff');
+        url('../fonts/TTMarxiana-Antiqua.woff2') format('woff2'),
+        url('../fonts/TTMarxiana-AntiquaItalic.woff') format('woff');
     font-weight: 400;
     font-style: normal;
 }
@@ -19,8 +19,8 @@
 @font-face {
     font-family: 'Marxiana';
     src: local('Marxiana Italic'),
-        url('fonts/TTMarxiana-AntiquaItalic.woff2') format('woff2'),
-        url('fonts/TTMarxiana-AntiquaItalic.woff') format('woff');
+        url('../fonts/TTMarxiana-AntiquaItalic.woff2') format('woff2'),
+        url('../fonts/TTMarxiana-AntiquaItalic.woff') format('woff');
     font-weight: 450;
     font-style: normal;
 }
@@ -28,8 +28,8 @@
 @font-face {
     font-family: 'Marxiana';
     src: local('Marxiana Bold'),
-        url('fonts/TTMarxiana-Grotesque.woff2') format('woff2'),
-        url('fonts/TTMarxiana-Grotesque.woff') format('woff');
+        url('../fonts/TTMarxiana-Grotesque.woff2') format('woff2'),
+        url('../fonts/TTMarxiana-Grotesque.woff') format('woff');
     font-weight: 700;
     font-style: normal;
 }
