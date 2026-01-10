@@ -15,7 +15,7 @@
 <body>
     <header>
         <div class="header__container flex">
-            <a href="#hero" class="header__logo">
+            <a href="#hero" class="header__logo" aria-label="Логотип">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="70 85 160 130"
                     preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#fff" stroke="none">
@@ -113,18 +113,55 @@
                 <p class="calculated__text">КС — полис на короткий срок.
                     Коэффициент сезонности (КС) делает полис дешевле для тех, кто пользуется автомобилем несколько
                     месяцев в году.</p>
-                <p class="calculated__text">При расчете стоимости полиса КАСКО также учитывается оценочная стоимость автомобиля.</p>
+                <p class="calculated__text">При расчете стоимости полиса КАСКО также учитывается оценочная стоимость
+                    автомобиля.</p>
                 <p class="calculated__cost">Примерная стоимость полиса ОСАГО: </p>
                 <p class="calculated__cost">Примерная стоимость полиса КАСКО: </p>
             </div>
             <div class="calculated__block flex">
-                <input type="text" placeholder="КТ" class="calculated__input input-KT">
-                <input type="text" placeholder="КБМ" class="calculated__input input-KBM">
-                <input type="text" placeholder="КВС" class="calculated__input input-KVS">
-                <input type="text" placeholder="КО" class="calculated__input input-KO">
-                <input type="text" placeholder="КМ" class="calculated__input input-KM">
-                <input type="text" placeholder="КС" class="calculated__input input-KS">
-                <input type="text" placeholder="Оценочная стоимость автомобиля" class="calculated__input input-COST">
+                <label class="calculated__block__label">
+                    <span class="calculated__block__vh">
+                        Введите место регистрации автомобиля
+                    </span>
+                    <input type="text" placeholder="КТ" class="calculated__input input-KT">
+                </label>
+                <label class="calculated__block__label">
+                    <span class="calculated__block__vh">
+                        Введите коэффициент бонус-малус
+                    </span>
+                    <input type="text" placeholder="КБМ" class="calculated__input input-KBM">
+                </label>
+                <label class="calculated__block__label">
+                    <span class="calculated__block__vh">
+                        Введите возраст и стаж водителя
+                    </span>
+                    <input type="text" placeholder="КВС" class="calculated__input input-KVS">
+                </label>
+                <label class="calculated__block__label">
+                    Введите количество водителей
+                    <span class="calculated__block__vh">
+                    </span>
+                    <input type="text" placeholder="КО" class="calculated__input input-KO">
+                </label>
+                <label class="calculated__block__label">
+                    <span class="calculated__block__vh">
+                        Введите мощность двигателя
+                    </span>
+                    <input type="text" placeholder="КМ" class="calculated__input input-KM">
+                </label>
+                <label class="calculated__block__label">
+                    <span class="calculated__block__vh">
+                        Введите количество месяцев действия полиса
+                    </span>
+                    <input type="text" placeholder="КС" class="calculated__input input-KS">
+                </label>
+                <label class="calculated__block__label">
+                    <span class="calculated__block__vh">
+                        Введите оценочную стоимость автомобиля
+                    </span>
+                    <input type="text" placeholder="Оценочная стоимость автомобиля"
+                        class="calculated__input input-COST">
+                </label>
                 <button class="calculated__button">Рассчитать стоимость</button>
             </div>
         </div>
@@ -147,9 +184,9 @@
                     </li>
                     <li class="info__list">
                         <p class="info__name">Адрес</p>
-                        <p href="" class="info__adress">
+                        <address class="info__adress">
                             Ставропольский край, с. Левокумское, ул. Калинина, д. 105
-                        </p>
+                        </address>
                     </li>
                 </ul>
                 <span class="info__decor">

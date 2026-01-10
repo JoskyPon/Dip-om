@@ -17,7 +17,7 @@
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(7, 14, 12);
+    color: #070e0c;
 }
 
 .calculated__descr {
@@ -35,7 +35,7 @@
     font-family: 'Marxiana';
     font-weight: 700;
     font-size: 18px;
-    color: rgb(7, 14, 12);
+    color: #070e0c;
 }
 
 .calculated__title {
@@ -45,7 +45,7 @@
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 30px;
-    color: rgb(141, 129, 111);
+    color: #8d816f;
 }
 .calculated__cost {
     margin: 0;
@@ -53,7 +53,7 @@
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(7, 14, 12);
+    color: #070e0c;
 }
 
 .calculated__block {
@@ -64,14 +64,25 @@
     padding-bottom: 20px;
 }
 
+.calculated__block__vh {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+}
+
 .calculated__input {
     padding: 10px 30px;
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(7, 14, 12);
+    color: #070e0c;
     border-radius: 10px;
-    border: 1px solid rgb(141, 129, 111);
+    border: 1px solid #8d816f;
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -80,11 +91,11 @@
 }
 
 .calculated__input:focus {
-    outline: 1px solid rgb(141, 129, 111);
+    outline: 1px solid #8d816f;
 }
 
 .calculated__input:active {
-    background-color: rgb(141, 129, 111);
+    background-color: #8d816f;
 }
 
 .calculated__button {
@@ -92,22 +103,22 @@
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(7, 14, 12);
-    background-color: rgb(190, 169, 144);
+    color: #070e0c;
+    background-color: #bea990;
     border-radius: 10px;
-    border: 1px solid rgb(141, 129, 111);
+    border: 1px solid #8d816f;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 
 .calculated__button:hover {
-        background-color: rgb(141, 129, 111);
+        background-color: #8d816f;
 }
 
 .calculated__button:focus {
-        border-color: rgb(113, 112, 112)
+        border-color: #717070;
 }
 
 .calculated__button:active {
-        background-color: rgb(113, 112, 112);
+        background-color: #717070;
 }

@@ -69,11 +69,11 @@ header {
 
 .header__link:hover,
 .header__link:focus {
-    color: rgb(190, 169, 144);
+    color: #bea990;
 }
 
 .header__link:active {
-    color: rgb(141, 129, 111);
+    color: #8d816f;
 }
 
 .hero {
@@ -126,8 +126,8 @@ header {
     width: 102px;
     font-family: 'Marxiana';
     font-size: 14px;
-    color: rgb(235, 230, 222);
-    border: 1px solid rgb(113, 112, 112);
+    color: #ebe6de;
+    border: 1px solid #717070;
     background-color: transparent;
     cursor: pointer;
     border-radius: 5px;
@@ -136,7 +136,7 @@ header {
 
 .hero__btn-1 {
     margin-right: 24px;
-    background-color: rgb(190, 169, 144);
+    background-color: #bea990;
 }
 
 .hero__btn-1:hover {
@@ -144,23 +144,23 @@ header {
 }
 
 .hero__btn-1:focus {
-    border-color: rgb(141, 129, 111);
+    border-color: #8d816f;
 }
 
 .hero__btn-1:active {
-    background-color: rgb(141, 129, 111);
+    background-color: #8d816f;
 }
 
 .hero__btn-2:hover {
-    background-color: rgb(190, 169, 144);
+    background-color: #bea990;
 }
 
 .hero__btn-2:focus {
-    border-color: rgb(141, 129, 111)
+    border-color: #8d816f;
 }
 
 .hero__btn-2:active {
-    background-color: rgb(141, 129, 111);
+    background-color: #8d816f;
 }
 
 .about-us {
@@ -181,7 +181,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 32px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
 .about-us__descr {
@@ -189,7 +189,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
 .about-us__text {
@@ -203,7 +203,7 @@ header {
     left: 520px;
     width: 2px;
     height: 100%;
-    background: rgb(190, 169, 144);
+    background: #bea990;
 }
 
 .services {
@@ -227,7 +227,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 42px;
-    color: rgb(141, 129, 111);
+    color: #8d816f;
 }
 
 .services__descr {
@@ -237,7 +237,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(7, 14, 12);
+    color: #070e0c;
 }
 
 .services__blocks {
@@ -274,7 +274,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 32px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
 .services__block__descr {
@@ -282,7 +282,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
 .services__block__links {
@@ -302,13 +302,13 @@ header {
     font-weight: 400;
     line-height: 20px;
     font-size: 16px;
-    color: rgb(255, 255, 255);
+    color: #fff;
     text-decoration: none;
     transition: color 0.3s ease-in-out;
 }
 
 .services__block__link:hover {
-    color: rgb(190, 169, 144);
+    color: #bea990;
 }
 
 .services__block__link:hover>.services__block__link__icon {
@@ -316,11 +316,11 @@ header {
 }
 
 .services__block__link:focus {
-    color: rgb(190, 169, 144);
+    color: #bea990;
 }
 
 .services__block__link:active {
-    color: rgb(113, 112, 112);
+    color: #717070;
 }
 
 .services__block__link__icon {
@@ -332,7 +332,7 @@ header {
 .services__block__link__icon>svg {
     width: 24px;
     height: 24px;
-    fill: rgb(255, 255, 255);
+    fill: #fff;
 
 }
 
@@ -399,7 +399,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 42px;
-    color: rgb(7, 14, 12);
+    color: #070e0c;
 }
 
 .reviews__descr {
@@ -408,7 +408,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(72, 72, 72);
+    color: #484848;
 }
 
 .reviews__blocks {
@@ -436,7 +436,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(72, 72, 72);
+    color: #484848;
 }
 
 .client {
@@ -454,7 +454,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 700;
     font-size: 20px;
-    color: rgb(7, 14, 12);
+    color: #070e0c;
 }
 
 .client__photo {
@@ -488,7 +488,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 700;
     font-size: 20px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
 .info__email,
@@ -498,24 +498,25 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(255, 255, 255);
+    color: #fff;
+    font-style: normal;
     text-decoration: none;
     transition: color 0.3s ease-in-out;
 }
 
 .info__email:hover,
 .info__phone:hover {
-    color: rgb(190, 169, 144);
+    color: #bea990;
 }
 
 .info__email:focus,
 .info__phone:focus {
-    color: rgb(190, 169, 144);
+    color: #bea990;
 }
 
 .info__email:active,
 .info__phone:active {
-    color: rgb(141, 129, 111);
+    color: #8d816f;
 }
 
 .info__descr {
@@ -525,7 +526,7 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
 .info__decor {
@@ -535,7 +536,7 @@ header {
     left: 0px;
     width: 100%;
     height: 1px;
-    background-color: rgb(255, 255, 255);
+    background-color: #fff;
 }
 
 .info__icon>svg>path {
@@ -558,21 +559,21 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(255, 255, 255);
+    color: #fff;
     text-decoration: none;
     transition: color 0.3s ease-in-out;
 }
 
 .footer__nav__link:hover {
-    color: rgb(190, 169, 144);
+    color: #bea990;
 }
 
 .footer__nav__link:focus {
-    color: rgb(190, 169, 144);
+    color: #bea990;
 }
 
 .footer__nav__link:active {
-    color: rgb(141, 129, 111);
+    color: #8d816f;
 }
 
 .footer__rr {
@@ -581,5 +582,5 @@ header {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 14px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }

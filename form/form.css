@@ -9,7 +9,7 @@
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 32px;
-    color: rgb(141, 129, 111);
+    color: #8d816f;
 }
 
 .form__descr {
@@ -37,9 +37,9 @@
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(7, 14, 12);
+    color: #070E0C;
     border-radius: 10px;
-    border: 1px solid rgb(141, 129, 111);
+    border: 1px solid #8d816f;
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -48,11 +48,11 @@
 }
 
 .input__data:focus, .input__record__time:focus {
-    outline: 1px solid rgb(141, 129, 111);
+    outline: 1px solid #8d816f;
 }
 
 .input__data:active, .input__record__time:active {
-    background-color: rgb(141, 129, 111);
+    background-color: #8d816f;
 }
 
 .input__driver,
@@ -123,22 +123,22 @@
 }
 
 .checkbox__label:hover>.checkbox__custom {
-    box-shadow: 0 0 0 1px rgb(141, 129, 111);
+    box-shadow: 0 0 0 1px #8d816f;
 }
 
 .checkbox__input:checked+.checkbox__custom {
-    box-shadow: 0 0 0 1px rgb(141, 129, 111);
+    box-shadow: 0 0 0 1px #8d816f;
     background-image: url(../img/checkbox-checked.svg);
     background-repeat: no-repeat;
     background-position: 50% 50%;
 }
 
 .checkbox__input:focus+.checkbox__custom {
-    box-shadow: 0 0 0 1px rgb(141, 129, 111);
+    box-shadow: 0 0 0 1px #8d816f;
 }
 
 .checkbox__input:focus+.checkbox__custom+.checkbox__descr {
-    color: rgb(141, 129, 111);
+    color: #8d816f;
 }
 
 .checkbox__input:checked:disabled+.checkbox__custom {
@@ -155,24 +155,24 @@
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
-    color: rgb(7, 14, 12);
-    background-color: rgb(190, 169, 144);
+    color: #070E0C;
+    background-color: #bea990;
     border-radius: 10px;
-    border: 1px solid rgb(141, 129, 111);
+    border: 1px solid #8d816f;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 
 .form__input__button:hover {
-        background-color: rgb(141, 129, 111);
+        background-color: #8d816f;
 }
 
 .form__input__button:focus {
-        border-color: rgb(113, 112, 112)
+        border-color: #717070;
 }
 
 .form__input__button:active {
-        background-color: rgb(113, 112, 112);
+        background-color: #717070;
 }
 
 .input__record {

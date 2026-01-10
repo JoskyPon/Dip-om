@@ -11,7 +11,7 @@
     left: 27%;
     width: 2px;
     height: 100%;
-    background: rgb(190, 169, 144);
+    background: #bea990;
 }
 
 .about-us__text {
@@ -313,7 +313,6 @@
 .reviews__block__text {
     margin-bottom: 0;
     padding: 15px 15px 0 15px;
-
 }
 
 .client__name {
@@ -367,12 +366,4 @@
 .info__decor {
     bottom: -34px;
 }
-
-
-
-
-
-
-
-
 }

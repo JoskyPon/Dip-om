@@ -15,7 +15,7 @@
 <body>
     <header>
         <div class="header__container flex">
-            <a href="#hero" class="header__logo">
+            <a href="#hero" class="header__logo" aria-label="Логотип">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="70 85 160 130"
                     preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#fff" stroke="none">
@@ -44,13 +44,33 @@
                 <div class="input__container flex">
                     <div class="input__passport flex">
                         <p class="input__passport__descr">Паспортные данные</p>
-                        <input type="number" placeholder="Серия номер паспорта" class="input__data">
-                        <input type="date" placeholder="Дата выдачи" class="input__data">
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите серию и номер паспорта
+                            </span>
+                            <input type="number" placeholder="Серия номер паспорта" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите дату выдачи паспорта
+                            </span>
+                            <input type="date" placeholder="Дата выдачи" class="input__data">
+                        </label>
                     </div>
                     <div class="input__driver flex">
                         <p class="input__driver__descr">Водительское удостоверение</p>
-                        <input type="text" placeholder="Номер ВУ" class="input__data">
-                        <input type="date" placeholder="Дата выдачи" class="input__data">
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите номер водительского удостоверения
+                            </span>
+                            <input type="text" placeholder="Номер ВУ" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите дату выдачи водительского удостоверения
+                            </span>
+                            <input type="date" placeholder="Дата выдачи" class="input__data">
+                        </label>
                         <p class="input__driver__text">Категория ВУ</p>
                         <ul class="input__driver__checkbox checkbox flex">
                             <li class="checkbox__list">
@@ -85,13 +105,48 @@
                     </div>
                     <div class="input__car flex">
                         <p class="input__car__descr">Данные автомобиля</p>
-                        <input type="text" placeholder="Регистрационный номер" class="input__data">
-                        <input type="text" placeholder="VIN номер" class="input__data">
-                        <input type="text" placeholder="Марка" class="input__data">
-                        <input type="text" placeholder="Модель" class="input__data">
-                        <input type="number" placeholder="Год выпуска" class="input__data">
-                        <input type="text" placeholder="Номер СТС" class="input__data">
-                        <input type="text" placeholder="Категория ТС" class="input__data">
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите регистрационный номер автомобиля
+                            </span>
+                            <input type="text" placeholder="Регистрационный номер" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите VIN-номер автомобиля
+                            </span>
+                            <input type="text" placeholder="VIN номер" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите марку автомобиля
+                            </span>
+                            <input type="text" placeholder="Марка" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите модель автомобиля
+                            </span>
+                            <input type="text" placeholder="Модель" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите год выпуска автомобиля
+                            </span>
+                            <input type="number" placeholder="Год выпуска" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите номер свидетельства о регистрации транспортного средства
+                            </span>
+                            <input type="text" placeholder="Номер СТС" class="input__data">
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите категорию транспортного средства
+                            </span>
+                            <input type="text" placeholder="Категория ТС" class="input__data">
+                        </label>
                     </div>
                 </div>
                 <div class="input__record flex">
@@ -100,7 +155,6 @@
                     <button class="form__input__button">Записаться</button>
                 </div>
             </form>
-
         </div>
     </section>
     <footer id="footer" class="footer">
@@ -121,9 +175,9 @@
                     </li>
                     <li class="info__list">
                         <p class="info__name">Адрес</p>
-                        <p href="" class="info__adress">
+                        <address class="info__adress">
                             Ставропольский край, с. Левокумское, ул. Калинина, д. 105
-                        </p>
+                        </address>
                     </li>
                 </ul>
                 <span class="info__decor">
