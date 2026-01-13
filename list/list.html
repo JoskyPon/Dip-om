@@ -32,7 +32,7 @@
                 <a href="index.html" class="header__link">О&nbsp;нас</a>
                 <a href="#services" class="header__link">Услуги</a>
                 <a href="#footer" class="header__link">Контакты</a>
-                <a href="#" class="header__link">Личный кабинет</a>
+                <a href="../autentification/autentification.html" target="_blank" class="header__link">Личный кабинет</a>
             </nav>
         </div>
     </header>
@@ -107,7 +107,7 @@
                 <p class="calculated__text">КО — количество водителей.
                     Есть два вида полисов: с ограничением количества водителей и без (мультидрайв). В обычный полис
                     нужно вписывать всех водителей, а автомобилем с мультидрайвом может управлять любой водитель с
-                    правами.</p>
+                    правами. Если полис с ограниченным количеством водителей введите 1, если мультидрайв - 2.</p>
                 <p class="calculated__text">КМ — мощность двигателя.
                     Коэффициент КМ делает полис дороже для более мощных автомобилей.</p>
                 <p class="calculated__text">КС — полис на короткий срок.
@@ -118,52 +118,61 @@
                 <p class="calculated__cost">Примерная стоимость полиса ОСАГО: </p>
                 <p class="calculated__cost">Примерная стоимость полиса КАСКО: </p>
             </div>
-            <div class="calculated__block flex">
-                <label class="calculated__block__label">
+            <form action="#" class="calculated__block flex">
+                <label class="calculated__block__label label-KT">
                     <span class="calculated__block__vh">
                         Введите место регистрации автомобиля
                     </span>
-                    <input type="text" placeholder="КТ" class="calculated__input input-KT">
+                    <select id="cars" name="cars" required class="calculated__input input-KT">
+                        <option value="1">Ставропольский край</option>
+                        <option value="2">Краснодарский край</option>
+                        <option value="3">Ростовская область</option>
+                        <option value="4">Республика Дагестан</option>
+                        <option value="5">Республика Калмыкия</option>
+                        <option value="6">Чеченская Республика</option>
+                        <option value="7">Кабардино-Балкарская Республика</option>
+                        <option value="8">Карачаево-Черкесская Республика</option>
+                        <option value="9">Республика Северная Осетия — Алания</option>
+                    </select>
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите коэффициент бонус-малус
                     </span>
-                    <input type="text" placeholder="КБМ" class="calculated__input input-KBM">
+                    <input type="text" placeholder="КБМ" required class="calculated__input input-KBM">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите возраст и стаж водителя
                     </span>
-                    <input type="text" placeholder="КВС" class="calculated__input input-KVS">
+                    <input type="text" placeholder="КВС" required class="calculated__input input-KVS">
                 </label>
                 <label class="calculated__block__label">
                     Введите количество водителей
                     <span class="calculated__block__vh">
                     </span>
-                    <input type="text" placeholder="КО" class="calculated__input input-KO">
+                    <input type="number" maxlength="1" placeholder="КО" required class="calculated__input input-KO">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите мощность двигателя
                     </span>
-                    <input type="text" placeholder="КМ" class="calculated__input input-KM">
+                    <input type="number" placeholder="КМ" required class="calculated__input input-KM">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите количество месяцев действия полиса
                     </span>
-                    <input type="text" placeholder="КС" class="calculated__input input-KS">
+                    <input type="number" minlength="1" maxlength="2" placeholder="КС" required class="calculated__input input-KS">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите оценочную стоимость автомобиля
                     </span>
-                    <input type="text" placeholder="Оценочная стоимость автомобиля"
-                        class="calculated__input input-COST">
+                    <input type="number" placeholder="Оценочная стоимость автомобиля" required class="calculated__input input-COST">
                 </label>
                 <button class="calculated__button">Рассчитать стоимость</button>
-            </div>
+            </form>
         </div>
     </section>
     <footer id="footer" class="footer">

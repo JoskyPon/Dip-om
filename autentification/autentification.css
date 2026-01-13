@@ -1,0 +1,102 @@
+.autentification {
+    padding: 250px 80px;
+    background-color: #EBE6DE;
+}
+
+.aut, .reg {
+    flex-direction: column;
+    align-items: center;
+}
+
+.reg__data, .reg__name {
+    text-align: center;
+    align-items: center;
+}
+
+.reg__container {
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 50px;
+}
+
+.autentification__title {
+    margin: 0;
+    margin-bottom: 50px;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 32px;
+    color: #8d816f;
+}
+
+.display-none {
+    display: none;
+}
+
+.aut__descr {
+    margin: 0;
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 20px;
+    color: #070E0C;
+}
+
+.aut__input, .reg__input {
+    padding: 10px 30px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: #070E0C;
+    border-radius: 10px;
+    border: 1px solid #8d816f;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.aut__input:hover {
+    background-color: rgb(7, 14, 12, 0.05);
+}
+
+.aut__input:focus {
+    outline: 1px solid #8d816f;
+}
+
+.aut__input:active{
+    background-color: #8d816f;
+}
+
+.aut__input:not(:last-child) {
+    margin-bottom: 30px;
+}
+
+.aut__buton {
+    padding: 10px 30px;
+    width: 220px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: #070e0c;
+    background-color: #bea990;
+    border-radius: 10px;
+    border: 1px solid #8d816f;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.aut__buton:hover {
+        background-color: #8d816f;
+}
+
+.aut__buton:focus {
+        border-color: #717070;
+}
+
+.aut__buton:active {
+        background-color: #717070;
+}
+
+.aut__buton:not(:last-child) {
+    margin-bottom: 60px;
+}

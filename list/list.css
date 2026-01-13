@@ -86,6 +86,13 @@
     transition: background-color 0.3s ease-in-out;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
 .calculated__input:hover {
     background-color: rgb(7, 14, 12, 0.05);
 }
@@ -96,6 +103,14 @@
 
 .calculated__input:active {
     background-color: #8d816f;
+}
+
+.label-KT {
+    width: 400px;
+}
+
+.input-KT {
+    width: 100%;
 }
 
 .calculated__button {

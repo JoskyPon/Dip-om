@@ -150,6 +150,13 @@
     background-image: url(../img/checkbox-checked-disabled.svg);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
 .form__input__button {
     padding: 10px 30px;
     font-family: 'Marxiana';
