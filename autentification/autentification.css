@@ -36,7 +36,7 @@
 
 .aut__descr {
     margin: 0;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     text-align: center;
     font-family: 'Marxiana';
     font-weight: 400;
@@ -55,19 +55,19 @@
     transition: background-color 0.3s ease-in-out;
 }
 
-.aut__input:hover {
+.aut__input:hover, .reg__input:hover {
     background-color: rgb(7, 14, 12, 0.05);
 }
 
-.aut__input:focus {
+.aut__input:focus, .reg__input:focus {
     outline: 1px solid #8d816f;
 }
 
-.aut__input:active{
+.aut__input:active, .reg__input:active {
     background-color: #8d816f;
 }
 
-.aut__input:not(:last-child) {
+.aut__input:not(:last-child), .reg__input:not(:last-child) {
     margin-bottom: 30px;
 }
 

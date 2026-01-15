@@ -1,0 +1,40 @@
+.account {
+    padding: 80px;
+    background-color: #EBE6DE;
+}
+
+.header__name {
+    margin: 0;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 16px;
+    color: #FAFAFA;
+}
+
+.item_descr {
+    margin: 0;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: #070e0c;
+}
+
+.cars__title, .policies__title {
+    margin: 0;
+    margin-bottom: 20px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 30px;
+    color: #8d816f;
+}
+
+.account__container {
+    justify-content: center;
+    gap: 50px;
+}
+
+.account__cars, .account__policies {
+    text-align: center;
+}
