@@ -1,0 +1,59 @@
+@media(max-width: 1500px) {
+    .account__container {
+        flex-wrap: wrap;
+    }
+}
+
+@media(max-width: 1024px) {
+    .account {
+        padding: 50px;
+    }
+
+    .account__title {
+        font-size: 30px;
+    }
+
+    .account__descr, .item_descr {
+        font-size: 15px;
+    }
+
+    .cars__title, .policies__title {
+        font-size: 25px;
+    }
+}
+
+@media(max-width: 768px) {
+    .header__name {
+        font-size: 10px;
+    }
+
+    .account {
+        padding: 20px;
+    }
+
+    .account__title {
+        font-size: 25px;
+    }
+
+    .account__descr, .item_descr {
+        font-size: 12px;
+    }
+
+    .account__descr {
+        margin-bottom: 30px;
+    }
+
+    .cars__title, .policies__title {
+        font-size: 20px;
+    }
+
+    .item_descr {
+        margin-bottom: 12px;
+    }
+}
+
+@media(max-width: 430px) {
+    .policies__title {
+        padding-top: 30px;
+    }
+}
