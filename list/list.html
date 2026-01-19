@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="list.css">
     <link rel="stylesheet" href="../index/media.css">
     <link rel="stylesheet" href="list-media.css">
-    <script src="list.js"></script>
+    <script type="module" src="list.js"></script>
 </head>
 
 <body>
@@ -32,7 +32,8 @@
                 <a href="index.html" class="header__link">О&nbsp;нас</a>
                 <a href="#services" class="header__link">Услуги</a>
                 <a href="#footer" class="header__link">Контакты</a>
-                <a href="../autentification/autentification.html" target="_blank" class="header__link">Личный кабинет</a>
+                <a href="../autentification/autentification.html" target="_blank" class="header__link">Личный
+                    кабинет</a>
             </nav>
         </div>
     </header>
@@ -97,12 +98,12 @@
                     города
                     регистрации (прописки) собственника автомобиля. Место регистрации самого автомобиля на цену полиса
                     не влияет.</p>
-                <p class="calculated__text">КБМ — коэффициент бонус-малус.
-                    Коэффициент бонус-малус (КБМ) зависит от аккуратности вождения: чем меньше вы становитесь виновником
+                <p class="calculated__text">КБМ — коэффициент бонус-малус. КБМ зависит от аккуратности вождения: чем меньше вы становитесь виновником
                     ДТП, тем дешевле ваш полис. Скидка или надбавка по КБМ накапливается с годами: каждый год можно
-                    уменьшить или увеличить свой коэффициент.</p>
+                    уменьшить или увеличить свой коэффициент. Не знаете свой КБМ? Проверьте его на <a
+                        class="calculated__text__link" target="_blank" href="https://bip.ru/proverka-kbm">сайте</a></p>
                 <p class="calculated__text">КВС — возраст и стаж водителя.
-                    Коэффициент возраст-стаж (КВС) делает полис дешевле для опытных водителей. Молодые люди без опыта
+                    КВС делает полис дешевле для опытных водителей. Молодые люди без опыта
                     вождения платят больше, а опытным водителям в возрасте дают скидку.</p>
                 <p class="calculated__text">КО — количество водителей.
                     Есть два вида полисов: с ограничением количества водителей и без (мультидрайв). В обычный полис
@@ -139,37 +140,48 @@
                     <span class="calculated__block__vh">
                         Введите коэффициент бонус-малус
                     </span>
-                    <input type="text" placeholder="КБМ" required class="calculated__input input-KBM">
+                    <input type="text" placeholder="Коэффициент бонус-малус" required
+                        class="calculated__input input-KBM">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
-                        Введите возраст и стаж водителя
+                        Введите возраст водителя
                     </span>
-                    <input type="text" placeholder="КВС" required class="calculated__input input-KVS">
+                    <input type="text" placeholder="Возраст" required min="16" max="99"
+                        class="calculated__input input-KVS-age">
+                </label>
+                <label class="calculated__block__label">
+                    <span class="calculated__block__vh">
+                        Введите стаж водителя
+                    </span>
+                    <input type="text" placeholder="Стаж" required max="99" class="calculated__input input-KVS-exp">
                 </label>
                 <label class="calculated__block__label">
                     Введите количество водителей
                     <span class="calculated__block__vh">
                     </span>
-                    <input type="number" maxlength="1" placeholder="КО" required class="calculated__input input-KO">
+                    <input type="number" maxlength="1" placeholder="Количество водителей" required
+                        class="calculated__input input-KO">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите мощность двигателя
                     </span>
-                    <input type="number" placeholder="КМ" required class="calculated__input input-KM">
+                    <input type="number" placeholder="Мощность двигателя" required class="calculated__input input-KM">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите количество месяцев действия полиса
                     </span>
-                    <input type="number" minlength="1" maxlength="2" placeholder="КС" required class="calculated__input input-KS">
+                    <input type="number" minlength="1" maxlength="2" placeholder="Количество месяцев действия полиса"
+                        required class="calculated__input input-KS">
                 </label>
                 <label class="calculated__block__label">
                     <span class="calculated__block__vh">
                         Введите оценочную стоимость автомобиля
                     </span>
-                    <input type="number" placeholder="Оценочная стоимость автомобиля" required class="calculated__input input-COST">
+                    <input type="number" placeholder="Оценочная стоимость автомобиля" required
+                        class="calculated__input input-COST">
                 </label>
                 <button class="calculated__button">Рассчитать стоимость</button>
             </form>

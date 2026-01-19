@@ -20,6 +20,24 @@
     color: #070e0c;
 }
 
+.calculated__text__link {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: 'Marxiana';
+    font-weight: 700;
+    font-size: 18px;
+    color: #8d816f;
+    transition: color 0.3s ease-in-out;
+}
+
+.calculated__text__link:hover {
+    color: #070e0c;
+}
+
+.calculated__text__link:active {
+    color: #EBE6DE;
+}
+
 .calculated__descr {
     padding: 20px;
     padding-bottom: 40px;
