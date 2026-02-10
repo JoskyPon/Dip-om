@@ -36,25 +36,25 @@
         </div>
     </header>
     <section class="autentification">
-        <form action="#" class="autentification__container">
+        <form action="http://localhost:3001/api/auth/register" class="autentification__container">
             <h1 class="autentification__title">Аутентификация</h1>
             <div class="reg flex">
                 <div class="reg__container flex">
                     <div class="reg__name">
                         <p class="aut__descr">Введите Фамилию</p>
-                        <input type="text" required class="reg__input">
+                        <input type="text" name="last_name" required class="reg__input">
                         <p class="aut__descr">Введите Имя</p>
-                        <input type="text" required class="reg__input">
+                        <input type="text" name="first_name" required class="reg__input">
                         <p class="aut__descr">Введите Отчество</p>
-                        <input type="text" required class="reg__input">
+                        <input type="text" name="middle_name" required class="reg__input">
                     </div>
                     <div class="reg__data">
                         <p class="aut__descr">Введите почту</p>
-                        <input type="email" required class="reg__input">
+                        <input type="email" name="email" required class="reg__input">
                         <p class="aut__descr">Введите пароль</p>
-                        <input type="text" required minlength="6" class="reg__input">
+                        <input type="text" name="password" required minlength="6" class="reg__input">
                         <p class="aut__descr">Введите пароль еще раз</p>
-                        <input type="text" required minlength="6" class="reg__input">
+                        <input type="text" name="confirm_password" required minlength="6" class="reg__input">
                     </div>
                 </div>
                 <button class="aut__buton">Зарегистрироваться</button>
@@ -116,6 +116,105 @@
             © Все права защищены. АвтоСтрах
         </p>
     </footer>
+    <!-- Добавьте перед закрывающим тегом </body> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.autentification__container');
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault(); // Отменяем стандартную отправку формы
+
+                // Получаем значения из полей
+                const inputs = form.querySelectorAll('.reg__input');
+                const data = {
+                    last_name: inputs[0].value.trim(),
+                    first_name: inputs[1].value.trim(),
+                    middle_name: inputs[2].value.trim(),
+                    email: inputs[3].value.trim(),
+                    password: inputs[4].value.trim(),
+                    confirm_password: inputs[5].value.trim()
+                };
+
+                // Валидация на клиенте
+                const errors = validateForm(data);
+                if (errors.length > 0) {
+                    alert(errors.join('\n'));
+                    return;
+                }
+
+                // Показываем индикатор загрузки
+                const button = form.querySelector('.aut__buton');
+                const originalText = button.textContent;
+                button.textContent = 'Регистрация...';
+                button.disabled = true;
+
+                try {
+                    // Отправляем данные на сервер
+                    const response = await fetch('http://localhost:3001/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        // Успешная регистрация
+                        alert('✅ ' + result.message);
+                        console.log('Токен:', result.token);
+                        console.log('Пользователь:', result.user);
+
+                        // Сохраняем токен и данные пользователя
+                        localStorage.setItem('authToken', result.token);
+                        localStorage.setItem('user', JSON.stringify(result.user));
+
+                        // Перенаправляем в личный кабинет
+                        window.location.href = 'cabinet.html';
+                    } else {
+                        // Ошибка от сервера
+                        alert('❌ ' + (result.error || 'Ошибка регистрации'));
+                    }
+                } catch (error) {
+                    console.error('Ошибка сети:', error);
+                    alert('❌ Ошибка соединения с сервером');
+                } finally {
+                    // Восстанавливаем кнопку
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }
+            });
+
+            function validateForm(data) {
+                const errors = [];
+
+                // Проверка обязательных полей
+                if (!data.last_name) errors.push('Фамилия обязательна');
+                if (!data.first_name) errors.push('Имя обязательно');
+                if (!data.email) errors.push('Email обязателен');
+                if (!data.password) errors.push('Пароль обязателен');
+
+                // Проверка email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (data.email && !emailRegex.test(data.email)) {
+                    errors.push('Некорректный email адрес');
+                }
+
+                // Проверка пароля
+                if (data.password.length < 6) {
+                    errors.push('Пароль должен содержать минимум 6 символов');
+                }
+
+                // Проверка совпадения паролей
+                if (data.password !== data.confirm_password) {
+                    errors.push('Пароли не совпадают');
+                }
+
+                return errors;
+            }
+        });
+    </script>
 </body>
 
 </html>
