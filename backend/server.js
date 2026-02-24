@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 // Подключаем роутеры
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/register', authRoutes);
 
 // Тестовый маршрут
 app.get('/api/test', (req, res) => {
@@ -54,5 +55,3 @@ app.listen(PORT, () => {
   console.log(`✅ Сервер запущен по адресу: http://localhost:${PORT}`);
   connectDB();
 });
-
-getData()

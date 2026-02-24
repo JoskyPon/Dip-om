@@ -28,7 +28,7 @@ export const connectDB = async () => {
 export const getData = async () => {
     try {
         const pool = await connectDB();
-        const result = await pool.request().query('SELECT TOP 10 * FROM games');
+        const result = await pool.request().query('SELECT TOP 10 * FROM Client');
         console.dir(result.recordset);
         return result.recordset;
     } catch (err) {

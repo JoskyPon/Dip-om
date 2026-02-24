@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="form.css">
     <link rel="stylesheet" href="../index/media.css">
     <link rel="stylesheet" href="form-media.css">
-    <link rel="stylesheet" href="../index.js">
+    <script src="form.js"></script>
 </head>
 
 <body>
@@ -32,7 +32,8 @@
                 <a href="../index/index.html" class="header__link">О&nbsp;нас</a>
                 <a href="../index/index.html" class="header__link">Услуги</a>
                 <a href="#footer" class="header__link">Контакты</a>
-                <a href="../autentification/autentification.html" target="_blank" class="header__link">Личный кабинет</a>
+                <a href="../autentification/autentification.html" target="_blank" class="header__link">Личный
+                    кабинет</a>
             </nav>
         </div>
     </header>
@@ -48,13 +49,16 @@
                             <span class="input__vh">
                                 Введите серию и номер паспорта
                             </span>
-                            <input type="number" placeholder="Серия номер паспорта" required minlength="10" maxlength="10" class="input__data">
+                            <input id="passport" type="number" placeholder="Серия номер паспорта" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите дату выдачи паспорта
                             </span>
-                            <input type="date" placeholder="Дата выдачи" required class="input__data">
+                            <input id="passport-date" type="date" placeholder="Дата выдачи"
+                                class="input__data">
+                            <span class="input__error"></span>
                         </label>
                     </div>
                     <div class="input__driver flex">
@@ -63,44 +67,52 @@
                             <span class="input__vh">
                                 Введите номер водительского удостоверения
                             </span>
-                            <input type="text" placeholder="Номер ВУ" required minlength="10" maxlength="10" class="input__data">
+                            <input id="driver-license" type="text" placeholder="Номер ВУ" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите дату выдачи водительского удостоверения
                             </span>
-                            <input type="date" placeholder="Дата выдачи" required class="input__data">
+                            <input id="driver-license-date" type="date" placeholder="Дата выдачи"
+                                class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <p class="input__driver__text">Категория ВУ</p>
                         <ul class="input__driver__checkbox checkbox flex">
                             <li class="checkbox__list">
                                 <label class="checkbox__label">
-                                    <input type="checkbox" class="checkbox__input">
+                                    <input id="driver-license-category-A" type="checkbox" value="A"
+                                        class="checkbox__input">
                                     <span class="checkbox__custom"></span>
                                     <span class="checkbox__descr">A</span>
                                 </label>
                             </li>
                             <li class="checkbox__list">
                                 <label class="checkbox__label">
-                                    <input type="checkbox" checked class="checkbox__input">
+                                    <input id="driver-license-category-B" type="checkbox" value="B"
+                                        class="checkbox__input">
                                     <span class="checkbox__custom"></span>
                                     <span class="checkbox__descr">B</span>
                                 </label>
                             </li>
                             <li class="checkbox__list">
                                 <label class="checkbox__label">
-                                    <input type="checkbox" class="checkbox__input">
+                                    <input id="driver-license-category-C" type="checkbox" value="C"
+                                        class="checkbox__input">
                                     <span class="checkbox__custom"></span>
                                     <span class="checkbox__descr">C</span>
                                 </label>
                             </li>
                             <li class="checkbox__list">
                                 <label class="checkbox__label">
-                                    <input type="checkbox" class="checkbox__input">
+                                    <input id="driver-license-category-D" type="checkbox" value="D"
+                                        class="checkbox__input">
                                     <span class="checkbox__custom"></span>
                                     <span class="checkbox__descr">D</span>
                                 </label>
                             </li>
+                            <span class="input__error"></span>
                         </ul>
                     </div>
                     <div class="input__car flex">
@@ -109,50 +121,67 @@
                             <span class="input__vh">
                                 Введите регистрационный номер автомобиля
                             </span>
-                            <input type="text" placeholder="Регистрационный номер" required minlength="8" maxlength="9" class="input__data">
+                            <input id="car-registration-number" type="text" placeholder="Регистрационный номер" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите VIN-номер автомобиля
                             </span>
-                            <input type="text" placeholder="VIN номер" required minlength="17" maxlength="17" class="input__data">
+                            <input id="car-VIN" type="text" placeholder="VIN номер" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите марку автомобиля
                             </span>
-                            <input type="text" placeholder="Марка" required class="input__data">
+                            <input id="car-brand" type="text" placeholder="Марка" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите модель автомобиля
                             </span>
-                            <input type="text" placeholder="Модель" required class="input__data">
+                            <input id="car-model" type="text" placeholder="Модель" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите год выпуска автомобиля
                             </span>
-                            <input type="number" placeholder="Год выпуска" required minlength="4" maxlength="4" class="input__data">
+                            <input id="car-date" type="number" placeholder="Год выпуска" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите номер свидетельства о регистрации транспортного средства
                             </span>
-                            <input type="text" placeholder="Номер СТС" required minlength="10" maxlength="10" class="input__data">
+                            <input id="car-STS" type="text" placeholder="Номер СТС" class="input__data">
+                            <span class="input__error"></span>
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
                                 Введите категорию транспортного средства
                             </span>
-                            <input type="text" placeholder="Категория ТС" required class="input__data">
+                            <select id="car-category" class="car__category">
+                                <option value="1">Выберите категорию ТС</option>
+                                <option value="a">A</option>
+                                <option value="b">B</option>
+                                <option value="c">C</option>
+                                <option value="d">D</option>
+                            </select>
+                            <span class="input__error"></span>
                         </label>
                     </div>
                 </div>
                 <div class="input__record flex">
                     <p class="input__record__descr">Выберите дату и время</p>
-                    <input type="datetime" required class="input__record__time">
-                    <button class="form__input__button">Записаться</button>
+                    <input id="appointment-date" type="date" class="input__record__time">
+                    <select id="appointment-time" class="input__record__time">
+                        <option value="1">Выберите время</option>
+                    </select>
+                    <span class="input__error"></span>
+                    <button id="record-btn" class="form__input__button">Записаться</button>
                 </div>
             </form>
         </div>

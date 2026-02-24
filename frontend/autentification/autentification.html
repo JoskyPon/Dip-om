@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="autentification.css">
     <link rel="stylesheet" href="../index/media.css">
     <link rel="stylesheet" href="autentification-media.css">
-    <link rel="stylesheet" href="../index.js">
+    <script src="autentification.js"></script>
 </head>
 
 <body>
@@ -38,37 +38,71 @@
     <section class="autentification">
         <form action="http://localhost:3001/api/auth/register" class="autentification__container">
             <h1 class="autentification__title">Аутентификация</h1>
-            <div class="reg flex">
+            <div class="reg flex display-none">
                 <div class="reg__container flex">
                     <div class="reg__name">
-                        <p class="aut__descr">Введите Фамилию</p>
-                        <input type="text" name="last_name" required class="reg__input">
-                        <p class="aut__descr">Введите Имя</p>
-                        <input type="text" name="first_name" required class="reg__input">
-                        <p class="aut__descr">Введите Отчество</p>
-                        <input type="text" name="middle_name" required class="reg__input">
+                        <div class="reg__item">
+                            <p class="aut__descr">Введите Фамилию</p>
+                            <input id="surname" type="text" name="last_name" placeholder="Иванов" class="reg__input">
+                            <span class="reg__item__error"></span>
+                        </div>
+                        <div class="reg__item">
+                            <p class="aut__descr">Введите Имя</p>
+                            <input id="name" type="text" name="first_name" placeholder="Иван" class="reg__input">
+                            <span class="reg__item__error"></span>
+                        </div>
+                        <div class="reg__item">
+                            <p class="aut__descr">Введите Отчество</p>
+                            <input id="patronymic" type="text" name="middle_name" placeholder="Иванович" class="reg__input">
+                            <span class="reg__item__error"></span>
+                        </div>
                     </div>
                     <div class="reg__data">
-                        <p class="aut__descr">Введите почту</p>
-                        <input type="email" name="email" required class="reg__input">
-                        <p class="aut__descr">Введите пароль</p>
-                        <input type="text" name="password" required minlength="6" class="reg__input">
-                        <p class="aut__descr">Введите пароль еще раз</p>
-                        <input type="text" name="confirm_password" required minlength="6" class="reg__input">
+                        <div class="reg__item">
+                            <p class="aut__descr">Введите номер телефона</p>
+                            <input id="phone-number" type="number" name="middle_name" placeholder="8 xxx xxx xx xx" class="reg__input">
+                            <span class="reg__item__error"></span>
+                        </div>
+                        <div class="reg__item">
+                            <p class="aut__descr">Введите почту</p>
+                            <input id="reg-email" type="email" name="email" placeholder="ivanov@mail.ru" class="reg__input">
+                            <span class="reg__item__error"></span>
+                        </div>
+                        <div class="reg__item">
+                            <p class="aut__descr">Введите пароль</p>
+                            <input id="reg-password" type="password" name="password" class="reg__input">
+                            <span class="reg__item__error"></span>
+                        </div>
+                        <div class="reg__item">
+                            <p class="aut__descr">Введите пароль еще раз</p>
+                            <input id="second-password" type="password" name="confirm_password" minlength="6" class="reg__input">
+                            <span class="reg__item__error"></span>
+                        </div>
                     </div>
                 </div>
-                <button class="aut__buton">Зарегистрироваться</button>
+                <button id="reg-btn" class="aut__buton">Зарегистрироваться</button>
             </div>
-            <div class="aut flex display-none">
-                <p class="aut__descr">Введите почту</p>
-                <input type="email" required class="aut__input">
-                <p class="aut__descr">Введите пароль</p>
-                <input type="text" required minlength="6" class="aut__input">
-                <button class="aut__buton">Войти</button>
-                <p class="aut__descr">Еще не зарегистрированы? </p>
-                <button class="aut__buton">Зарегистрироваться</button>
+            <div class="aut flex">
+                <div class="aut__item">
+                    <p class="aut__descr">Введите почту</p>
+                    <input id="aut-email" type="email" placeholder="ivanov@mail.ru" class="aut__input">
+                    <span class="aut__item__error"></span>
+                </div>
+                <div class="aut__item">
+                    <p class="aut__descr">Введите пароль</p>
+                    <input id="aut-password" type="password" class="aut__input">
+                    <span class="aut__item__error"></span>
+                </div>
+                <div class="aut__item">
+                    <button id="login-btn" class="aut__buton">Войти</button>
+                    <span class="aut__item__error"></span>
+                </div>
             </div>
         </form>
+        <p id="reg-descr" class="reg__descr">Еще не зарегистрированы?</p>
+        <button id="go-reg" class="aut__buton">Зарегистрироваться</button>
+        <p id="aut-descr" class="aut__descr display-none">Уже зарегистрированы?</p>
+        <button id="go-login" class="aut__buton display-none">Войти</button>
     </section>
     <footer id="footer" class="footer">
         <div class="footer__container flex">
@@ -76,7 +110,7 @@
                 <ul class="footer__info info">
                     <li class="info__list">
                         <p class="info__name">Email</p>
-                        <a href="mailto:podg.sanek@gmaol.com" class="info__email">
+                        <a href="mailto:podg.sanek@gmail.com" class="info__email">
                             podg.sanek@gmail.com
                         </a>
                     </li>
@@ -142,74 +176,34 @@
                     return;
                 }
 
-                // Показываем индикатор загрузки
-                const button = form.querySelector('.aut__buton');
-                const originalText = button.textContent;
-                button.textContent = 'Регистрация...';
-                button.disabled = true;
 
-                try {
-                    // Отправляем данные на сервер
-                    const response = await fetch('http://localhost:3001/api/auth/register', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
 
-                    const result = await response.json();
-
-                    if (response.ok) {
-                        // Успешная регистрация
-                        alert('✅ ' + result.message);
-                        console.log('Токен:', result.token);
-                        console.log('Пользователь:', result.user);
-
-                        // Сохраняем токен и данные пользователя
-                        localStorage.setItem('authToken', result.token);
-                        localStorage.setItem('user', JSON.stringify(result.user));
-
-                        // Перенаправляем в личный кабинет
-                        window.location.href = 'cabinet.html';
-                    } else {
-                        // Ошибка от сервера
-                        alert('❌ ' + (result.error || 'Ошибка регистрации'));
-                    }
-                } catch (error) {
-                    console.error('Ошибка сети:', error);
-                    alert('❌ Ошибка соединения с сервером');
-                } finally {
-                    // Восстанавливаем кнопку
-                    button.textContent = originalText;
-                    button.disabled = false;
-                }
             });
 
             function validateForm(data) {
                 const errors = [];
 
                 // Проверка обязательных полей
-                if (!data.last_name) errors.push('Фамилия обязательна');
-                if (!data.first_name) errors.push('Имя обязательно');
-                if (!data.email) errors.push('Email обязателен');
-                if (!data.password) errors.push('Пароль обязателен');
+                //if (!data.last_name) errors.push('Фамилия обязательна');
+                //if (!data.first_name) errors.push('Имя обязательно');
+                //if (!data.email) errors.push('Email обязателен');
+                //if (!data.password) errors.push('Пароль обязателен');
 
                 // Проверка email
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (data.email && !emailRegex.test(data.email)) {
-                    errors.push('Некорректный email адрес');
-                }
+                //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                //if (data.email && !emailRegex.test(data.email)) {
+                //    errors.push('Некорректный email адрес');
+                //}
 
                 // Проверка пароля
-                if (data.password.length < 6) {
-                    errors.push('Пароль должен содержать минимум 6 символов');
-                }
+                //if (data.password.length < 6) {
+                //    errors.push('Пароль должен содержать минимум 6 символов');
+                //}
 
                 // Проверка совпадения паролей
-                if (data.password !== data.confirm_password) {
-                    errors.push('Пароли не совпадают');
-                }
+                //if (data.password !== data.confirm_password) {
+                //    errors.push('Пароли не совпадают');
+                //}
 
                 return errors;
             }

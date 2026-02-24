@@ -1,5 +1,6 @@
 .autentification {
     padding: 250px 80px;
+    text-align: center;
     background-color: #EBE6DE;
 }
 
@@ -14,9 +15,14 @@
 }
 
 .reg__container {
+    position: relative;
     align-items: center;
     justify-content: center;
     gap: 50px;
+    margin-bottom: 50px;
+}
+
+.autentification__container {
     margin-bottom: 50px;
 }
 
@@ -34,7 +40,7 @@
     display: none;
 }
 
-.aut__descr {
+.aut__descr, .reg__descr {
     margin: 0;
     margin-bottom: 20px;
     text-align: center;
@@ -99,4 +105,37 @@
 
 .aut__buton:not(:last-child) {
     margin-bottom: 60px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.alert {
+    position: absolute;
+    bottom: -30px;
+    left: 35%;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: #070e0c;
+}
+
+.aut__item, .reg__item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 60px;
+}
+
+.reg__item {
+    margin-bottom: 40px;
+}
+
+.aut__item__error, .reg__item__error {
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: red;
 }

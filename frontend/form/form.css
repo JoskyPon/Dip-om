@@ -32,7 +32,7 @@
     gap: 50px;
 }
 
-.input__data, .input__record__time {
+.input__data, .input__record__time, .car__category {
     padding: 10px 30px;
     font-family: 'Marxiana';
     font-weight: 400;
@@ -198,4 +198,16 @@ input::-webkit-inner-spin-button {
 
 .input__record__time {
     margin-bottom: 20px;
+}
+
+.input__label {
+    display: flex;
+    flex-direction: column;
+}
+
+.input__error {
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: red;
 }
