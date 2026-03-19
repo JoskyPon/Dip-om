@@ -11,6 +11,24 @@
     color: #FAFAFA;
 }
 
+.header__button {
+    padding: 0px 20px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 16px;
+    color: #FAFAFA;
+    background-color: #717070;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.header__button:hover {
+        background-color: #8d816f;
+}
+
+
 .item_descr, .account__descr {
     margin: 0;
     text-align: center;

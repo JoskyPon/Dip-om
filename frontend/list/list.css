@@ -72,6 +72,7 @@
     font-weight: 400;
     font-size: 18px;
     color: #070e0c;
+    transition: bacground-color 0.3s ease-in-out;
 }
 
 .calculated__block {
@@ -155,3 +156,4 @@ input::-webkit-inner-spin-button {
 .calculated__button:active {
         background-color: #717070;
 }
+

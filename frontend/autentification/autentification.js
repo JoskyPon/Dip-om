@@ -42,13 +42,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const itemError = document.querySelectorAll('.reg__item__error')
 
         //Валидация полей с фамилией, именем и отчеством
-        if (!surname || !name || !patronymic) {
+        if (!surname) {
             itemError[0].innerHTML = 'Поле не может быть пустым'
-            itemError[1].innerHTML = 'Поле не может быть пустым'
-            itemError[2].innerHTML = 'Поле не может быть пустым'
         } else {
             itemError[0].innerHTML = ''
+        }
+
+        if (!name) {
+            itemError[1].innerHTML = 'Поле не может быть пустым'
+        } else {
             itemError[1].innerHTML = ''
+        }
+
+        if (!patronymic) {
+            itemError[2].innerHTML = 'Поле не может быть пустым'
+        } else {
             itemError[2].innerHTML = ''
         }
 
@@ -85,9 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         //Прерывание отправки данных на сервер если присутствуют ошибки при заполнении полей
-        if (itemError[0] === '' || itemError[1] === '' || itemError[2] === '' || itemError[3] === '' 
-            || itemError[4] === '' || itemError[5] === '' || itemError[6] === '') {
-            return
+        for (let i = 0; i <= 6; i++) {
+            if (itemError[i] === '') {
+                return
+            }
         }
 
         try {
@@ -125,7 +134,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    regbtn.addEventListener('click', registrationUser)
+    regbtn.addEventListener('click', function (e) {
+        e.preventDefault()
+        registrationUser()
+    })
 
     // Функция входа
     async function loginUser() {
@@ -156,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (itemError[0] === '' || itemError[1] === '') {
             return
         }
-        
+
 
         try {
             const response = await fetch(`${API_URL}/auth/login`, {
@@ -187,6 +199,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    loginBtn.addEventListener('click', loginUser)
+    loginBtn.addEventListener('click', function (e) {
+        e.preventDefault()
+        loginUser()
+    })
+
+
 
 })

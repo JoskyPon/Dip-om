@@ -13,7 +13,6 @@ const config = {
     }
 };
 
-
 export const connectDB = async () => {
     try {
         const pool = await sql.connect(config);
@@ -21,17 +20,5 @@ export const connectDB = async () => {
         return pool;
     } catch (err) {
         console.error('Ошибка подключения:', err);
-    }
-};
-
-// Пример выполнения запроса
-export const getData = async () => {
-    try {
-        const pool = await connectDB();
-        const result = await pool.request().query('SELECT TOP 10 * FROM Client');
-        console.dir(result.recordset);
-        return result.recordset;
-    } catch (err) {
-        console.error('Ошибка запроса:', err);
     }
 };

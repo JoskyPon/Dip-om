@@ -2,12 +2,18 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import sql from 'mssql';
 
-
 const register = async (req, res) => {
     try {
+        console.log('📥 Регистрация:', req.body);
         const { surname, name, patronymic, phoneNumber, regEmail, regPassword } = req.body;
 
-        // Проверки на дубликаты (как в варианте 1)
+        // Валидация
+        if (!surname || !name || !regEmail || !regPassword) {
+            return res.status(400).json({
+                success: false,
+                error: 'Заполните обязательные поля'
+            });
+        }
 
         const pool = await sql.connect();
 
@@ -23,41 +29,51 @@ const register = async (req, res) => {
             });
         }
 
-        // Проверка телефона
-        const phoneCheck = await pool.request()
-            .input('phoneNumber', sql.NVarChar, phoneNumber)
-            .query('SELECT ClientId FROM Client WHERE ClientPhoneNumber = @phoneNumber');
-
-        if (phoneCheck.recordset.length > 0) {
-            return res.status(409).json({
-                success: false,
-                error: 'Пользователь с таким номером телефона уже существует'
-            });
-        }
-
         // Хешируем пароль
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(regPassword, salt);
 
-        // Сохраняем хеш вместо открытого пароля
+        // Сохраняем пользователя
         const result = await pool.request()
             .input('surname', sql.NVarChar, surname)
             .input('name', sql.NVarChar, name)
-            .input('patronymic', sql.NVarChar, patronymic)
-            .input('phoneNumber', sql.NVarChar, phoneNumber)
+            .input('patronymic', sql.NVarChar, patronymic || null)
+            .input('phoneNumber', sql.NVarChar, phoneNumber || null)
             .input('regEmail', sql.NVarChar, regEmail)
-            .input('regPassword', sql.NVarChar, hashedPassword) // <-- Хеш
-            .query(`INSERT INTO Client 
-                    (ClientSurname, ClientName, ClientPatronymic, ClientPhoneNumber, ClientEmail, ClientPassword)
-                    VALUES (@surname, @name, @patronymic, @phoneNumber, @regEmail, @regPassword)`);
+            .input('regPassword', sql.NVarChar, hashedPassword)
+            .query(`
+                INSERT INTO Client 
+                (ClientSurname, ClientName, ClientPatronymic, ClientPhoneNumber, ClientEmail, ClientPassword)
+                OUTPUT INSERTED.ClientId, INSERTED.ClientEmail, INSERTED.ClientName, INSERTED.ClientSurname
+                VALUES (@surname, @name, @patronymic, @phoneNumber, @regEmail, @regPassword)
+            `);
+
+        const newUser = result.recordset[0];
+
+        // Генерируем JWT токен СРАЗУ после регистрации
+        const token = jwt.sign(
+            {
+                userId: newUser.ClientId,
+                email: newUser.ClientEmail
+            },
+            process.env.JWT_SECRET || 'your-secret-key',
+            { expiresIn: '7d' }
+        );
 
         res.status(201).json({
             success: true,
             message: `Пользователь ${name} ${surname} успешно зарегистрирован`,
+            user: {
+                id: newUser.ClientId,
+                email: newUser.ClientEmail,
+                name: newUser.ClientName,
+                surname: newUser.ClientSurname
+            },
+            token  // отправляем токен
         });
 
     } catch (error) {
-        console.error(`❌ Ошибка регистрации: ${error}`);
+        console.error(`❌ Ошибка регистрации:`, error);
         res.status(500).json({
             success: false,
             error: 'Внутренняя ошибка сервера'
@@ -112,8 +128,13 @@ const login = async (req, res) => {
         res.json({
             success: true,
             message: 'Вход выполнен успешно',
-            user: userWithoutPassword,
-            token
+            user: {
+                id: user.ClientId,
+                surname: user.ClientSurname,
+                name: user.ClientName,
+                email: user.ClientEmail,
+            },
+            token: token
         });
 
     } catch (error) {
@@ -133,22 +154,4 @@ const logout = (req, res) => {
     });
 };
 
-const profile = async (req, res) => {
-    res.json({ message: 'Регистрация (заглушка)' });
-};
-
-const vehicles = async (req, res) => {
-    res.json({ message: 'Вход (заглушка)' });
-};
-
-const policies = async (req, res) => {
-    res.json({ message: 'Выход (заглушка)' });
-};
-
-const appointments = async (req, res) => {
-    res.json({ message: 'Выход (заглушка)' });
-};
-
-
-
-export { register, login, logout, profile, vehicles, policies, appointments }
+export { register, login, logout }

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="account.css">
     <link rel="stylesheet" href="../index/media.css">
     <link rel="stylesheet" href="account-media.css">
-    <link rel="stylesheet" href="../index.js">
 </head>
 
 <body>
@@ -32,88 +31,20 @@
                 <a href="index.html" class="header__link">О&nbsp;нас</a>
                 <a href="#services" class="header__link">Услуги</a>
                 <a href="#footer" class="header__link">Контакты</a>
-                <p class="header__name">Александр Подгайный</p>
+                <a href="../form/form.html" class="header__link">Записаться на прием</a>
+                <p class="header__name"></p>
+                <button id="logout-btn" class="header__button">Выйти</button>
             </nav>
         </div>
     </header>
     <section class="account">
         <h2 class="account__title">Личный кабинет</h2>
-        <p class="account__descr">Здесь расположена информация о ваших автомобилях и страховых полисах, оформленных на них</p>
+        <p class="account__descr">Здесь расположена информация о ваших автомобилях и страховых полисах, оформленных на
+            них</p>
         <div class="account__container flex">
-            <div class="account__card flex">
-                <div class="account__cars cars">
-                    <h3 class="cars__title">Ваш автомобиль</h3>
-                    <div class="cars__block">
-                        <div class="cars__block__item item">
-                            <p class="item_descr">Марка: ВАЗ</p>
-                            <p class="item_descr">Модель: Priora</p>
-                            <p class="item_descr">Год выпуска: 2008</p>
-                            <p class="item_descr">Мощность двигателся: 98лс</p>
-                            <p class="item_descr">VIN-номер: 788512245124</p>
-                            <p class="item_descr">Номер СТС: 3565659562</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="account__policies">
-                    <h3 class="policies__title">Ваш полис</h3>
-                    <div class="policies__block">
-                        <div class="policies__block__item item">
-                            <p class="item_descr">Номер полиса: 4512215114</p>
-                            <p class="item_descr">Дата начала действия: 04.08.2025</p>
-                            <p class="item_descr">Дата окончания действия: 04.08.2026</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="account__card flex">
-                <div class="account__cars cars">
-                    <h3 class="cars__title">Ваш автомобиль</h3>
-                    <div class="cars__block">
-                        <div class="cars__block__item item">
-                            <p class="item_descr">Марка: Honda</p>
-                            <p class="item_descr">Модель: Accord</p>
-                            <p class="item_descr">Год выпуска: 2008</p>
-                            <p class="item_descr">Мощность двигателся: 197лс</p>
-                            <p class="item_descr">VIN-номер: 35332629454246</p>
-                            <p class="item_descr">Номер СТС: 9794512435</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="account__policies">
-                    <h2 class="policies__title">Ваш полис</h2>
-                    <div class="policies__block">
-                        <div class="policies__block__item item">
-                            <p class="item_descr">Номер полиса: 423956455</p>
-                            <p class="item_descr">Дата начала действия: 15.12.2025</p>
-                            <p class="item_descr">Дата окончания действия: 15.15.2026</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="account__card flex">
-                <div class="account__cars cars">
-                    <h2 class="cars__title">Ваш автомобиль</h2>
-                    <div class="cars__block">
-                        <div class="cars__block__item item">
-                            <p class="item_descr">Марка: ВАЗ</p>
-                            <p class="item_descr">Модель: Granta</p>
-                            <p class="item_descr">Год выпуска: 2013</p>
-                            <p class="item_descr">Мощность двигателся: 98лс</p>
-                            <p class="item_descr">VIN-номер: 444565665454</p>
-                            <p class="item_descr">Номер СТС: 445541124</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="account__policies">
-                    <h2 class="policies__title">Ваш полис</h2>
-                    <div class="policies__block">
-                        <div class="policies__block__item item">
-                            <p class="item_descr">Номер полиса: 423956455</p>
-                            <p class="item_descr">Дата начала действия: 01.02.2025</p>
-                            <p class="item_descr">Дата окончания действия: 01.02.2026</p>
-                        </div>
-                    </div>
-                </div>
+            <div id="loading" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Загрузка данных...</p>
             </div>
         </div>
     </section>
@@ -163,6 +94,7 @@
             © Все права защищены. АвтоСтрах
         </p>
     </footer>
+    <script src="account.js"></script>
 </body>
 
 </html>

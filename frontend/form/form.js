@@ -1,68 +1,210 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    const recordButton = document.querySelector('#record-btn')
+    const API_URL = 'http://localhost:3001/api'
 
-    // Функция для генерации времени с интервалом 15 минут
-    function generateTimeSlots(selectedDate) {
-        const timeSelect = document.getElementById('appointment-time');
-        timeSelect.innerHTML = '<option value="1">Выберите время</option>';
+    function checkAuth() {
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
 
-        // Начало рабочего дня (например, 9:00)
-        const startHour = 9;
-        const endHour = 18; // Конец рабочего дня (18:00)
+        if (!token || !user) {
+            // Сохраняем информацию о том, что хотели записаться
+            sessionStorage.setItem('pendingAppointment', 'true');
 
-        // Если выбранная дата - сегодня, начинаем с текущего времени
-        const now = new Date();
-        const selectedDateObj = new Date(selectedDate);
-        const isToday = selectedDateObj.toDateString() === now.toDateString();
+            // Если не авторизован - показываем сообщение и кнопку входа
+            const authCheck = document.getElementById('auth-check');
+            authCheck.innerHTML = `
+                <div class="auth-warning">
+                    <h3>Требуется авторизация</h3>
+                    <p>Для записи на приём необходимо войти в личный кабинет</p>
+                    <button onclick="window.location.href='login.html'">Войти</button>
+                    <button onclick="window.location.href='register.html'">Зарегистрироваться</button>
+                </div>
+            `;
 
-        let currentHour = startHour;
-        let currentMinute = 0;
-
-        if (isToday) {
-            currentHour = now.getHours();
-            currentMinute = Math.ceil(now.getMinutes() / 15) * 15; // Округляем до следующего 15-минутного интервала
-
-            if (currentMinute >= 60) {
-                currentHour++;
-                currentMinute = 0;
-            }
+            // Скрываем форму записи
+            document.querySelector('.form__container').style.display = 'none';
+            return false;
         }
 
-        // Генерируем слоты с 9:00 до 18:00 с шагом 15 минут
-        for (let hour = currentHour; hour < endHour; hour++) {
-            for (let minute = (hour === currentHour ? currentMinute : 0); minute < 60; minute += 15) {
-                // Форматируем время (HH:MM)
-                const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        try {
+            const tokenData = JSON.parse(atob(token.split('.')[1]));
+            const exp = tokenData.exp * 1000;
 
-                // Формат для отображения (24-часовой формат)
-                const displayTime = `${hour}:${minute.toString().padStart(2, '0')}`;
-
-                const option = document.createElement('option');
-                option.value = timeString; // Храним в 24-часовом формате для отправки
-                option.textContent = displayTime;
-                timeSelect.appendChild(option);
+            if (Date.now() >= exp) {
+                // Токен истёк
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'login.html?expired=true';
+                return false;
             }
+        } catch (e) {
+            console.error('Ошибка проверки токена:', e);
+        }
+
+        // Если авторизован - показываем форму
+        document.querySelector('.form__container').style.display = 'block';
+        return true;
+    }
+
+    function displayAvailableTimes(availableTimes) {
+        const timeSelect = document.getElementById('appointment-time');
+        const selectedDate = document.getElementById('appointment-date').value;
+
+        // Сохраняем выбранное время (если было)
+        const currentSelectedTime = timeSelect.value;
+
+        // Очищаем select
+        timeSelect.innerHTML = '<option value="1">Выберите время</option>';
+
+        if (availableTimes && availableTimes.length > 0) {
+            // Добавляем только доступное время
+            availableTimes.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time; // Храним в 24-часовом формате для отправки
+                option.textContent = time; // Отображаем время
+                timeSelect.appendChild(option);
+            });
+
+            // Если ранее выбранное время всё ещё доступно, восстанавливаем его
+            if (currentSelectedTime && currentSelectedTime !== '1' && availableTimes.includes(currentSelectedTime)) {
+                timeSelect.value = currentSelectedTime;
+            }
+        } else {
+            // Если нет доступного времени
+            timeSelect.innerHTML = '<option value="1">Нет свободного времени</option>';
+        }
+
+        // Убираем индикатор загрузки
+        const loadingElement = document.getElementById('time-loading');
+        if (loadingElement) loadingElement.style.display = 'none';
+    }
+
+    // Функция проверки доступного времени
+    async function checkAvailableTime(selectedDate) {
+        console.log('Проверка доступного времени для даты:', selectedDate);
+
+        // Показываем индикатор загрузки
+        const timeSelect = document.getElementById('appointment-time');
+        timeSelect.innerHTML = '<option value="1">Загрузка...</option>';
+
+        // Добавляем индикатор загрузки, если его нет
+        let loadingElement = document.getElementById('time-loading');
+        if (!loadingElement) {
+            loadingElement = document.createElement('div');
+            loadingElement.id = 'time-loading';
+            loadingElement.className = 'loading-spinner-small';
+            loadingElement.textContent = 'Проверка доступного времени...';
+            timeSelect.parentNode.appendChild(loadingElement);
+        }
+        loadingElement.style.display = 'block';
+
+        try {
+            const response = await fetch(`${API_URL}/appointments/check-time?date=${selectedDate}`);
+            const data = await response.json();
+
+            console.log('📥 Ответ сервера:', data);
+
+            if (data.success) {
+                // Отображаем доступное время
+                displayAvailableTimes(data.availableTimes);
+
+                // Если есть занятое время, показываем предупреждение
+                if (data.busyTimes && data.busyTimes.length > 0) {
+                    console.log('Занятое время:', data.busyTimes);
+                }
+            } else {
+                console.error('Ошибка от сервера:', data.error);
+                timeSelect.innerHTML = '<option value="1">Ошибка загрузки</option>';
+                loadingElement.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Ошибка проверки времени:', error);
+            timeSelect.innerHTML = '<option value="1">Ошибка соединения</option>';
+            const loadingElement = document.getElementById('time-loading');
+            if (loadingElement) loadingElement.style.display = 'none';
         }
     }
 
+    // Функция проверки, является ли день выходным (суббота или воскресенье)
+    function isWeekend(dateString) {
+        const date = new Date(dateString);
+        const dayOfWeek = date.getDay(); // 0 - воскресенье, 6 - суббота
+        return dayOfWeek === 0 || dayOfWeek === 6;
+    }
+
+    // Функция для отображения сообщения о выходном дне
+    function showWeekendMessage(isWeekend) {
+        const weekendWarning = document.getElementById('weekend-warning') || createWeekendWarning();
+
+        if (isWeekend) {
+            weekendWarning.style.display = 'block';
+            // Блокируем выбор времени
+            const timeSelect = document.getElementById('appointment-time');
+            timeSelect.innerHTML = '<option value="1">Выходной день</option>';
+            timeSelect.disabled = true;
+        } else {
+            weekendWarning.style.display = 'none';
+            // Разблокируем выбор времени
+            const timeSelect = document.getElementById('appointment-time');
+            timeSelect.disabled = false;
+            // Загружаем доступное время для рабочего дня
+            const selectedDate = document.getElementById('appointment-date').value;
+            checkAvailableTime(selectedDate);
+        }
+    }
+
+    // Создаём элемент для предупреждения о выходном дне
+    function createWeekendWarning() {
+        const warning = document.createElement('div');
+        warning.id = 'weekend-warning';
+        warning.className = 'weekend-warning';
+        warning.innerHTML = `
+        <p>Выходной день</p>
+        <p>Приём осуществляется только в будние дни (пн-пт)</p>
+    `;
+
+        // Вставляем после поля выбора даты
+        const dateInput = document.getElementById('appointment-date');
+        dateInput.parentNode.insertBefore(warning, dateInput.nextSibling);
+
+        return warning;
+    }
+
+    // Выполняем проверку
+    const isAuth = checkAuth();
+    if (!isAuth) return; // Останавливаем выполнение, если не авторизован
+
+    const recordButton = document.querySelector('#record-btn')
+
     // Обработчик изменения даты
     document.getElementById('appointment-date').addEventListener('change', function (e) {
-        generateTimeSlots(e.target.value);
+        const selectedDate = e.target.value;
+        console.log('Выбрана дата:', selectedDate);
+
+        // Проверяем, не выходной ли это день
+        const weekend = isWeekend(selectedDate);
+        showWeekendMessage(weekend);
+
+        if (!weekend) {
+            // Если рабочий день - проверяем доступное время
+            checkAvailableTime(selectedDate);
+        }
     });
 
     // Устанавливаем минимальную дату - сегодня
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('appointment-date').min = today;
-    document.getElementById('appointment-date').value = today;
+    const dateInput = document.getElementById('appointment-date');
+    dateInput.min = today;
+    dateInput.value = today;
 
-    // Генерируем слоты для сегодняшней даты при загрузке
-    generateTimeSlots(today);
+    // При загрузке страницы проверяем доступное время для сегодняшней даты
+    checkAvailableTime(today);
 
     //Функция записи клиента
     async function recordUser(appointmentDateTime) {
         const passport = document.querySelector('#passport').value.trim()
         const passportDate = document.querySelector('#passport-date').value.trim()
+        const issuedBy = document.querySelector('#passport-issued').value.trim()
         const driverLicense = document.querySelector('#driver-license').value.trim()
         const driverLicenseDate = document.querySelector('#driver-license-date').value.trim()
         const carRegistrationNumber = document.querySelector('#car-registration-number').value.trim()
@@ -71,12 +213,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const carModel = document.querySelector('#car-model').value.trim()
         const carDate = document.querySelector('#car-date').value.trim()
         const carSTS = document.querySelector('#car-STS').value.trim()
-        const carCategory = document.querySelector('#car-category').value
-        const appointmentTime = document.querySelector('#appointment-time > option:checked').value
+        const carPower = document.querySelector('#car-power').value.trim()
+        const appointmentTime = document.querySelector('#appointment-time').value
+        const appointmentPolicy = document.querySelector('#appointment-policy').value
 
         const itemError = document.querySelectorAll('.input__error')
 
-        console.log(carCategory)
+        console.log(passportDate)
 
         //Валидация серии номера паспорта
         if (!passport) {
@@ -94,24 +237,30 @@ document.addEventListener('DOMContentLoaded', function () {
             itemError[1].innerHTML = ''
         }
 
-        //валидация номера ВУ
-        if (!driverLicense) {
+        if (!issuedBy) {
             itemError[2].innerHTML = 'Поле не может быть пустым'
-        } else if (driverLicense.length !== 10) {
-            itemError[2].innerHTML = 'Серия и номер паспорта должны состоять из 10 цифр'
         } else {
             itemError[2].innerHTML = ''
         }
 
-        //Валидация даты выдачи ВУ
-        if (!driverLicenseDate) {
+        //валидация номера ВУ
+        if (!driverLicense) {
             itemError[3].innerHTML = 'Поле не может быть пустым'
+        } else if (driverLicense.length !== 10) {
+            itemError[3].innerHTML = 'Серия и номер паспорта должны состоять из 10 цифр'
         } else {
             itemError[3].innerHTML = ''
         }
 
+        //Валидация даты выдачи ВУ
+        if (!driverLicenseDate) {
+            itemError[4].innerHTML = 'Поле не может быть пустым'
+        } else {
+            itemError[4].innerHTML = ''
+        }
+
         const checkboxes = document.querySelectorAll('.checkbox__input')
-        let selectedCategories = []
+        const selectedCategories = []
 
         console.log(selectedCategories)
 
@@ -121,83 +270,100 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        //Валидация выбранных категорий
         if (selectedCategories.length === 0) {
-            itemError[4].innerHTML = 'Поле не может быть пустым'
-        } else {
-            itemError[4].innerHTML = ''
-        }
-
-        if (!carRegistrationNumber) {
             itemError[5].innerHTML = 'Поле не может быть пустым'
-        } else if (carRegistrationNumber.length < 8 || carRegistrationNumber.length > 9) {
-            itemError[5].innerHTML = 'Номер должен содержать от 8 до 9 символов'
         } else {
             itemError[5].innerHTML = ''
         }
 
-        if (!carVIN) {
+        //Валидация регистрационного номера
+        if (!carRegistrationNumber) {
             itemError[6].innerHTML = 'Поле не может быть пустым'
-        } else if (carVIN.length !== 17) {
-            itemError[6].innerHTML = 'Номер должен состоять из 17 символов'
+        } else if (carRegistrationNumber.length < 8 || carRegistrationNumber.length > 9) {
+            itemError[6].innerHTML = 'Номер должен содержать от 8 до 9 символов'
         } else {
             itemError[6].innerHTML = ''
         }
 
-        if (!carBrand) {
+        //Валидация VIN-номера
+        if (!carVIN) {
             itemError[7].innerHTML = 'Поле не может быть пустым'
+        } else if (carVIN.length !== 17) {
+            itemError[7].innerHTML = 'Номер должен состоять из 17 символов'
         } else {
             itemError[7].innerHTML = ''
         }
 
-        if (!carModel) {
+        //Валидация марки автомобиля
+        if (!carBrand) {
             itemError[8].innerHTML = 'Поле не может быть пустым'
         } else {
             itemError[8].innerHTML = ''
         }
 
-        if (!carDate) {
+        //Валидация модели автомобиля
+        if (!carModel) {
             itemError[9].innerHTML = 'Поле не может быть пустым'
         } else {
             itemError[9].innerHTML = ''
         }
 
-        if (!carSTS) {
+        //Валидация года выпуска автомобиля
+        if (!carDate) {
             itemError[10].innerHTML = 'Поле не может быть пустым'
-        } else if (carSTS.length !== 10) {
-            itemError[10].innerHTML = 'Номер должен состоять из 10 символов'
         } else {
             itemError[10].innerHTML = ''
         }
 
-        if (carCategory == 1) {
-            itemError[11].innerHTML = 'Выберите категорию из списка'
+        //Валидация номера СТС
+        if (!carSTS) {
+            itemError[11].innerHTML = 'Поле не может быть пустым'
+        } else if (carSTS.length !== 10) {
+            itemError[11].innerHTML = 'Номер должен состоять из 10 символов'
         } else {
             itemError[11].innerHTML = ''
         }
 
-        if (appointmentTime == 1) {
-            itemError[12].innerHTML = 'Выберите подходящее время'
-            itemError[12].style.cssText = 'margin-bottom: 20px'
+        //Валидация мощности двигателя
+        if (!carPower) {
+            itemError[12].innerHTML = 'Поле не может быть пустым'
+        } else if (carPower > 1500) {
+            itemError[12].innerHTML = 'Введите настоящую мощность'
         } else {
             itemError[12].innerHTML = ''
-            itemError[12].style.cssText = 'margin-bottom: 0'
         }
 
-        for (let i = 0; i <= 11; i++) {
-            if (itemError[i] === '') {
+        //Валидация выбранного времени
+        if (appointmentTime == 1) {
+            itemError[13].innerHTML = 'Выберите подходящее время'
+            itemError[13].style.cssText = 'margin-bottom: 20px'
+        } else {
+            itemError[13].innerHTML = ''
+            itemError[13].style.cssText = 'margin-bottom: 0'
+        }
+
+        //Прерывание отправки формы если есть хотя бы одна ошибка
+        for (let i = 0; i <= 13; i++) {
+            console.log(itemError[i])
+            if (itemError[i] !== '') {
                 return
             }
         }
 
+        const token = localStorage.getItem('token');
+
         try {
-            const response = await fetch(`` / users, {
+            const response = await fetch(`${API_URL}/appointments`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     passport: passport,
                     passportDate: passportDate,
+                    passportIssuedBy: issuedBy,
                     driverLicense: driverLicense,
                     driverLicenseDate: driverLicenseDate,
                     driverLicenseCategories: selectedCategories,
@@ -207,41 +373,43 @@ document.addEventListener('DOMContentLoaded', function () {
                     carModel: carModel,
                     carDate: carDate,
                     carSTS: carSTS,
-                    carCategory: carCategory,
-                    dateOfVisit: appointmentDateTime
+                    carPower: carPower,
+                    dateOfVisit: appointmentDateTime,
+                    appointmentPolicy: appointmentPolicy
                 }),
             })
 
-            const data = await response.json()
-            console.log(data)
+            const data = await response.json();
 
+            if (data.success) {
+                alert(`Запись создана! Номер заявки: ${data.applicationId}`);
+            } else {
+                alert(`Ошибка: ${data.error}`);
+            }
+
+            console.log(data);
         } catch (error) {
-            console.log(error)
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при отправке данных');
         }
-
-
     }
 
     recordButton.addEventListener('click', function (e) {
         e.preventDefault()
+
+        const timeSelect = document.getElementById('appointment-time');
+        if (timeSelect.value === '1' || timeSelect.value === 'Нет свободного времени') {
+            alert('Пожалуйста, выберите доступное время');
+            return;
+        }
+
         const date = document.getElementById('appointment-date').value;
-        const time = document.getElementById('appointment-time').value;
+        const time = timeSelect.value;
 
         // Объединяем дату и время для отправки на сервер
         const appointmentDateTime = `${date}T${time}:00`;
         console.log('Выбрано время:', appointmentDateTime);
 
-        getUserInfo()
         recordUser(appointmentDateTime)
     })
-
-    async function getUserInfo() {
-        try {
-            const response = await fetch(`` / users)
-            const data = await response.json()
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
 })

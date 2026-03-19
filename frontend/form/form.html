@@ -38,6 +38,7 @@
         </div>
     </header>
     <section class="form">
+        <div id="auth-check"></div>
         <div class="form__container">
             <h1 class="form__title">Записаться на прием</h1>
             <p class="form__descr">Для записи на прием в офис заполните поля с данными</p>\
@@ -56,8 +57,14 @@
                             <span class="input__vh">
                                 Введите дату выдачи паспорта
                             </span>
-                            <input id="passport-date" type="date" placeholder="Дата выдачи"
-                                class="input__data">
+                            <input id="passport-date" type="date" placeholder="Дата выдачи" class="input__data">
+                            <span class="input__error"></span>
+                        </label>
+                        <label class="input__label">
+                            <span class="input__vh">
+                                Введите кем выдан паспорт
+                            </span>
+                            <input id="passport-issued" type="text" placeholder="Кем выдан" class="input__data">
                             <span class="input__error"></span>
                         </label>
                     </div>
@@ -74,8 +81,7 @@
                             <span class="input__vh">
                                 Введите дату выдачи водительского удостоверения
                             </span>
-                            <input id="driver-license-date" type="date" placeholder="Дата выдачи"
-                                class="input__data">
+                            <input id="driver-license-date" type="date" placeholder="Дата выдачи" class="input__data">
                             <span class="input__error"></span>
                         </label>
                         <p class="input__driver__text">Категория ВУ</p>
@@ -90,7 +96,7 @@
                             </li>
                             <li class="checkbox__list">
                                 <label class="checkbox__label">
-                                    <input id="driver-license-category-B" type="checkbox" value="B"
+                                    <input id="driver-license-category-B" type="checkbox" value="B" checked
                                         class="checkbox__input">
                                     <span class="checkbox__custom"></span>
                                     <span class="checkbox__descr">B</span>
@@ -121,7 +127,8 @@
                             <span class="input__vh">
                                 Введите регистрационный номер автомобиля
                             </span>
-                            <input id="car-registration-number" type="text" placeholder="Регистрационный номер" class="input__data">
+                            <input id="car-registration-number" type="text" placeholder="Регистрационный номер"
+                                class="input__data">
                             <span class="input__error"></span>
                         </label>
                         <label class="input__label">
@@ -161,24 +168,23 @@
                         </label>
                         <label class="input__label">
                             <span class="input__vh">
-                                Введите категорию транспортного средства
+                                Введите мощность двигателя
                             </span>
-                            <select id="car-category" class="car__category">
-                                <option value="1">Выберите категорию ТС</option>
-                                <option value="a">A</option>
-                                <option value="b">B</option>
-                                <option value="c">C</option>
-                                <option value="d">D</option>
-                            </select>
+                            <input id="car-power" type="text" placeholder="Мощность двигателя" class="input__data">
                             <span class="input__error"></span>
                         </label>
                     </div>
                 </div>
                 <div class="input__record flex">
-                    <p class="input__record__descr">Выберите дату и время</p>
+                    <p class="input__record__descr">Выберите дату, время и полис</p>
                     <input id="appointment-date" type="date" class="input__record__time">
                     <select id="appointment-time" class="input__record__time">
                         <option value="1">Выберите время</option>
+                    </select>
+                    <span class="input__error"></span>
+                    <select id="appointment-policy" class="input__record__time">
+                        <option value="1">ОСАГО</option>
+                        <option value="2">КАСКО</option>
                     </select>
                     <span class="input__error"></span>
                     <button id="record-btn" class="form__input__button">Записаться</button>

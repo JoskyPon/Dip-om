@@ -53,19 +53,22 @@
                         </div>
                         <div class="reg__item">
                             <p class="aut__descr">Введите Отчество</p>
-                            <input id="patronymic" type="text" name="middle_name" placeholder="Иванович" class="reg__input">
+                            <input id="patronymic" type="text" name="middle_name" placeholder="Иванович"
+                                class="reg__input">
                             <span class="reg__item__error"></span>
                         </div>
                     </div>
                     <div class="reg__data">
                         <div class="reg__item">
                             <p class="aut__descr">Введите номер телефона</p>
-                            <input id="phone-number" type="number" name="middle_name" placeholder="8 xxx xxx xx xx" class="reg__input">
+                            <input id="phone-number" type="number" name="middle_name" placeholder="8 xxx xxx xx xx"
+                                class="reg__input">
                             <span class="reg__item__error"></span>
                         </div>
                         <div class="reg__item">
                             <p class="aut__descr">Введите почту</p>
-                            <input id="reg-email" type="email" name="email" placeholder="ivanov@mail.ru" class="reg__input">
+                            <input id="reg-email" type="email" name="email" placeholder="ivanov@mail.ru"
+                                class="reg__input">
                             <span class="reg__item__error"></span>
                         </div>
                         <div class="reg__item">
@@ -75,7 +78,8 @@
                         </div>
                         <div class="reg__item">
                             <p class="aut__descr">Введите пароль еще раз</p>
-                            <input id="second-password" type="password" name="confirm_password" minlength="6" class="reg__input">
+                            <input id="second-password" type="password" name="confirm_password" minlength="6"
+                                class="reg__input">
                             <span class="reg__item__error"></span>
                         </div>
                     </div>
@@ -150,65 +154,6 @@
             © Все права защищены. АвтоСтрах
         </p>
     </footer>
-    <!-- Добавьте перед закрывающим тегом </body> -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('.autentification__container');
-
-            form.addEventListener('submit', async function (e) {
-                e.preventDefault(); // Отменяем стандартную отправку формы
-
-                // Получаем значения из полей
-                const inputs = form.querySelectorAll('.reg__input');
-                const data = {
-                    last_name: inputs[0].value.trim(),
-                    first_name: inputs[1].value.trim(),
-                    middle_name: inputs[2].value.trim(),
-                    email: inputs[3].value.trim(),
-                    password: inputs[4].value.trim(),
-                    confirm_password: inputs[5].value.trim()
-                };
-
-                // Валидация на клиенте
-                const errors = validateForm(data);
-                if (errors.length > 0) {
-                    alert(errors.join('\n'));
-                    return;
-                }
-
-
-
-            });
-
-            function validateForm(data) {
-                const errors = [];
-
-                // Проверка обязательных полей
-                //if (!data.last_name) errors.push('Фамилия обязательна');
-                //if (!data.first_name) errors.push('Имя обязательно');
-                //if (!data.email) errors.push('Email обязателен');
-                //if (!data.password) errors.push('Пароль обязателен');
-
-                // Проверка email
-                //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                //if (data.email && !emailRegex.test(data.email)) {
-                //    errors.push('Некорректный email адрес');
-                //}
-
-                // Проверка пароля
-                //if (data.password.length < 6) {
-                //    errors.push('Пароль должен содержать минимум 6 символов');
-                //}
-
-                // Проверка совпадения паролей
-                //if (data.password !== data.confirm_password) {
-                //    errors.push('Пароли не совпадают');
-                //}
-
-                return errors;
-            }
-        });
-    </script>
 </body>
 
 </html>
