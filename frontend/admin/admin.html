@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель администратора - Калькулятор ОСАГО</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+    <div class="header">
+        <h1>📋 Панель администратора</h1>
+        <div class="header-right">
+            <span class="admin-name" id="admin-name">Загрузка...</span>
+            <button class="logout-btn" id="logout-btn">Выйти</button>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Статистика -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="stat-total">-</div>
+                <div class="stat-label">Всего записей</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-pending">-</div>
+                <div class="stat-label">В ожидании</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-today">-</div>
+                <div class="stat-label">Сегодня</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-upcoming">-</div>
+                <div class="stat-label">Предстоящие</div>
+            </div>
+        </div>
+
+        <!-- Панель администратора -->
+        <div class="admin-panel">
+            <div class="panel-tabs">
+                <button class="tab-btn active" data-tab="appointments">📅 Записи на приём</button>
+                <button class="tab-btn" data-tab="search">🔍 Поиск пользователей</button>
+                <button class="tab-btn" data-tab="documents">📄 Верификация документов</button>
+            </div>
+
+            <!-- Вкладка "Записи на приём" -->
+            <div class="tab-content active" id="tab-appointments">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Статус:</label>
+                        <select id="filter-status">
+                            <option value="all">Все</option>
+                            <option value="Ожидание">В ожидании</option>
+                            <option value="Завершено">Завершено</option>
+                            <option value="Отменено">Отменено</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Дата с:</label>
+                        <input type="date" id="filter-start-date">
+                    </div>
+                    <div class="filter-group">
+                        <label>Дата по:</label>
+                        <input type="date" id="filter-end-date">
+                    </div>
+                    <div class="filter-group">
+                        <label>Поиск по ФИО:</label>
+                        <input type="text" id="filter-search" placeholder="Введите фамилию, имя...">
+                    </div>
+                    <button id="apply-filters">Применить</button>
+                    <button id="reset-filters">Сбросить</button>
+                </div>
+
+                <div id="appointments-container">
+                    <div class="loading">Загрузка записей...</div>
+                </div>
+            </div>
+
+            <!-- Вкладка "Поиск пользователей" -->
+            <div class="tab-content" id="tab-search">
+                <div class="search-section">
+                    <div class="search-input-group">
+                        <input type="text" id="search-user-input" placeholder="Введите фамилию, имя или отчество...">
+                        <button id="search-user-btn">🔍 Найти</button>
+                    </div>
+                    <div id="search-results">
+                        <div class="no-data">Введите поисковый запрос для поиска пользователей</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для деталей записи -->
+    <div id="appointment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Детали записи</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div class="loading">Загрузка...</div>
+            </div>
+            <div class="modal-footer">
+                <button id="close-modal-btn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+<div class="tab-content" id="tab-documents">
+    <div id="documents-container">
+        <div class="loading">Загрузка заявок...</div>
+    </div>
+</div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

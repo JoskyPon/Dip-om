@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const regEmail = document.querySelector('#reg-email').value.trim()
         const regPassword = document.querySelector('#reg-password').value.trim()
         const secondPassword = document.querySelector('#second-password').value.trim()
+        const checkbox = document.querySelector('#agree')
 
         const itemError = document.querySelectorAll('.reg__item__error')
 
@@ -62,34 +63,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //Валидация номера телефона
         if (phoneNumber.length !== 11) {
-            itemError[3].innerHTML = 'Номер телефона должен состоять из 11 цифр'
+            itemError[4].innerHTML = 'Номер телефона должен состоять из 11 цифр'
         } else {
-            itemError[3].innerHTML = ''
+            itemError[4].innerHTML = ''
         }
 
         //Валидация Email и вывод сообщения с ошибкой
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (regEmail && !emailRegex.test(regEmail)) {
-            itemError[4].innerHTML = 'Email должен содержать @ и окончание'
+            itemError[5].innerHTML = 'Email должен содержать @ и окончание'
         } else if (!regEmail) {
-            itemError[4].innerHTML = 'Email не может быть пустым'
-        } else {
-            itemError[4].innerHTML = ''
-        }
-
-        //Валидация пароля и вывод сообщения с ошибкой
-        if (!regPassword) {
-            itemError[5].innerHTML = 'Пароль не может быть пустым'
-        } else if (regPassword.length < 6) {
-            itemError[5].innerHTML = 'Минимальная длина пароля - 6 символов'
+            itemError[5].innerHTML = 'Email не может быть пустым'
         } else {
             itemError[5].innerHTML = ''
         }
 
-        if (regPassword !== secondPassword) {
-            itemError[6].innerHTML = 'Пароли не совпадают'
+        //Валидация пароля и вывод сообщения с ошибкой
+        if (!regPassword) {
+            itemError[6].innerHTML = 'Пароль не может быть пустым'
+        } else if (regPassword.length < 6) {
+            itemError[6].innerHTML = 'Минимальная длина пароля - 6 символов'
         } else {
             itemError[6].innerHTML = ''
+        }
+
+        if (regPassword !== secondPassword) {
+            itemError[7].innerHTML = 'Пароли не совпадают'
+        } else {
+            itemError[7].innerHTML = ''
+        }
+
+        if (!checkbox.checked) {
+            itemError[3].innerHTML = 'Согласие обязательно'
+        } else {
+            itemError[3].innerHTML = ''
         }
 
         //Прерывание отправки данных на сервер если присутствуют ошибки при заполнении полей
@@ -199,9 +206,72 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    async function loginAdmin() {
+        const login = document.querySelector('#aut-email').value.trim()
+        const password = document.querySelector('#aut-password').value.trim()
+        const itemError = document.querySelectorAll('.aut__item__error')
+
+        //Валидация Email и вывод сообщения с ошибкой
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (login && !emailRegex.test(login)) {
+            itemError[0].innerHTML = 'Email должен содержать @ и окончание'
+        } else if (!login) {
+            itemError[0].innerHTML = 'Email не может быть пустым'
+        } else {
+            itemError[0].innerHTML = ''
+        }
+
+        //Валидация пароля и вывод сообщения с ошибкой
+        if (!password) {
+            itemError[1].innerHTML = 'Пароль не может быть пустым'
+        } else if (password.length < 6) {
+            itemError[1].innerHTML = 'Минимальная длина пароля - 6 символов'
+        } else {
+            itemError[1].innerHTML = ''
+        }
+
+        //Прерывание отправки данных на сервер если присутствуют ошибки при заполнении полей
+        if (itemError[0] === '' || itemError[1] === '') {
+            return
+        }
+
+
+        try {
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ login: login, password: password })
+            })
+
+            const data = await response.json()
+
+            console.log('Ответ сервера:', data)
+
+            if (data.success) {
+                alert('Вход выполнен!')
+                localStorage.setItem('token', data.token)
+                localStorage.setItem('user', JSON.stringify(data.user))
+                window.location.href = '../admin/admin.html'
+                itemError[2].innerHTML = ''
+            } else {
+                itemError[2].innerHTML = 'Неверный логин или пароль'
+            }
+
+        } catch (error) {
+            console.error('Ошибка:', error)
+            alert('Ошибка соединения с сервером')
+        }
+    }
+
     loginBtn.addEventListener('click', function (e) {
         e.preventDefault()
-        loginUser()
+        if (login = 'admin@mail.ru') {
+            loginAdmin()
+        } else {
+            loginUser()
+        }
     })
 
 

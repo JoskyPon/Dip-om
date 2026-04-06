@@ -1,0 +1,621 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+/* Шапка */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 24px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-name {
+    font-weight: 500;
+}
+
+.logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Контейнер */
+.container {
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Статистика */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.stat-label {
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Панель управления */
+.admin-panel {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.panel-tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    background: #fafafa;
+}
+
+.tab-btn {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+    border-bottom-color: #667eea;
+    color: #667eea;
+    font-weight: 500;
+}
+
+.tab-content {
+    padding: 20px;
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Фильтры */
+.filters {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-weight: 500;
+}
+
+select,
+input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button {
+    padding: 8px 16px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #5a67d8;
+}
+
+/* Таблица записей */
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.appointments-table th,
+.appointments-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.appointments-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.appointments-table tr:hover {
+    background: #fafafa;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Поиск пользователей */
+.search-section {
+    margin-bottom: 20px;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-input-group input {
+    flex: 1;
+    padding: 10px;
+}
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.user-details {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    text-align: right;
+}
+
+.close-modal {
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+/* Загрузка */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* Ошибка */
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Нет данных */
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    height: 67.5px;
+    flex-wrap: wrap;
+}
+
+.view-details {
+    background: #3498db;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.view-details:hover {
+    background: #2980b9;
+}
+
+.cancel-appointment {
+    background: #e74c3c;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.cancel-appointment:hover {
+    background: #c0392b;
+}
+
+.restore-appointment {
+    background: #f39c12;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.restore-appointment:hover {
+    background: #e67e22;
+}
+
+.complete-appointment {
+    background: #2ecc71;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.complete-appointment:hover {
+    background: #27ae60;
+}
+
+/* Для отключённых кнопок */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Добавьте в admin.html */
+
+.verification-card {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    margin: 0;
+}
+
+.card-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.client-info, .vehicle-info, .documents-info {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.client-info h4, .vehicle-info h4, .documents-info h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #667eea;
+}
+
+.documents-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: white;
+    border-radius: 5px;
+}
+
+.document-item.missing {
+    color: #e74c3c;
+    background: #fef5f5;
+}
+
+.view-doc-link {
+    color: #3498db;
+    text-decoration: none;
+    padding: 4px 8px;
+    background: #e3f2fd;
+    border-radius: 4px;
+}
+
+.view-doc-link:hover {
+    background: #bbdef5;
+}
+
+.card-actions {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.verify-btn {
+    background: #2ecc71;
+}
+
+.verify-btn:hover {
+    background: #27ae60;
+}
+
+.reject-btn {
+    background: #e74c3c;
+}
+
+.reject-btn:hover {
+    background: #c0392b;
+}
+
+
+
+
+
+/* Стили для карточек верификации */
+.verification-card {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    margin: 0;
+}
+
+.card-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.client-info, .vehicle-info, .documents-info {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.client-info h4, .vehicle-info h4, .documents-info h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #667eea;
+}
+
+.documents-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: white;
+    border-radius: 5px;
+}
+
+.document-item.missing {
+    color: #e74c3c;
+    background: #fef5f5;
+}
+
+.view-doc-link {
+    color: #3498db;
+    text-decoration: none;
+    padding: 4px 8px;
+    background: #e3f2fd;
+    border-radius: 4px;
+}
+
+.view-doc-link:hover {
+    background: #bbdef5;
+}
+
+.card-actions {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.verify-btn {
+    background: #2ecc71;
+}
+
+.verify-btn:hover {
+    background: #27ae60;
+}
+
+.reject-btn {
+    background: #e74c3c;
+}
+
+.reject-btn:hover {
+    background: #c0392b;
+}
+
+.tab-content.active {
+    display: block !important;
+}
+
+/* Временные стили для отладки */
+.verification-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: white !important;
+    margin: 20px !important;
+    padding: 15px !important;
+    border: 2px solid red !important;
+}
+
+#documents-container {
+    display: block !important;
+    min-height: 200px !important;
+    background: #f0f0f0 !important;
+}
+
+/* Стили для вкладок */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block !important; /* Добавьте !important для гарантии */
+}
+
+/* Убедитесь, что нет других стилей, переопределяющих display */
+#tab-appointments,
+#tab-search,
+#tab-documents {
+    display: none;
+}
+
+#tab-appointments.active,
+#tab-search.active,
+#tab-documents.active {
+    display: block;
+}

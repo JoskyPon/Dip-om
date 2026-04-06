@@ -16,7 +16,6 @@
 
 .reg__container {
     position: relative;
-    align-items: center;
     justify-content: center;
     gap: 50px;
     margin-bottom: 50px;
@@ -133,9 +132,72 @@ input::-webkit-inner-spin-button {
     margin-bottom: 40px;
 }
 
+.checkbox__descr {
+    margin-bottom: 80px;
+}
+
+.position {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
 .aut__item__error, .reg__item__error {
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 18px;
     color: red;
+}
+
+.checkbox__input {
+    width: 13px;
+}
+
+.checkbox__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.checkbox__custom {
+    position: absolute;
+    top: 70px;
+    width: 15px;
+    height: 15px;
+    box-shadow: 0 0 0 1px #fff;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.checkbox__label:hover>.checkbox__custom {
+    box-shadow: 0 0 0 1px #8d816f;
+}
+
+.checkbox__input:checked+.checkbox__custom {
+    box-shadow: 0 0 0 1px #8d816f;
+    background-image: url(../img/checkbox-checked-2.svg);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+.checkbox__input:focus+.checkbox__custom {
+    box-shadow: 0 0 0 1px #8d816f;
+}
+
+.checkbox__input:focus+.checkbox__custom+.checkbox__descr {
+    color: #8d816f;
+}
+
+.checkbox__input:checked:disabled+.checkbox__custom {
+    box-shadow: 0 0 0 1px #666;
+}
+
+.checkbox__input:disabled+.checkbox__custom {
+    box-shadow: 0 0 0 1px #666;
+    background-image: url(../img/checkbox-checked-disabled.svg);
 }

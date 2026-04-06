@@ -1,0 +1,245 @@
+.form {
+    padding: 80px;
+    background-color: #EBE6DE;
+}
+
+.form__title {
+    margin: 0;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 32px;
+    color: #8d816f;
+}
+
+.form__descr {
+    margin: 0;
+    margin-bottom: 50px;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 20px;
+    color: #070E0C;
+}
+
+.input__container {
+    gap: 50px;
+}
+
+.input {
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.input__data, .input__record__time, .car__category {
+    padding: 10px 30px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: #070E0C;
+    border-radius: 10px;
+    border: 1px solid #8d816f;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.input__data:hover, .input__record__time:hover {
+    background-color: rgb(7, 14, 12, 0.05);
+}
+
+.input__data:focus, .input__record__time:focus {
+    outline: 1px solid #8d816f;
+}
+
+.input__data:active, .input__record__time:active {
+    background-color: #8d816f;
+}
+
+.input__driver,
+.input__passport,
+.input__car {
+    flex-direction: column;
+    gap: 20px;
+}
+
+.checkbox {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    list-style-type: none;
+}
+
+.input__car__descr,
+.input__driver__descr,
+.input__passport__descr,
+.input__driver__text {
+    margin: 0;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 20px;
+    color: #070E0C;
+}
+
+.checkbox__descr {
+    margin: 0;
+    padding-left: 17px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 20px;
+    color: #070E0C;
+    transition: color 0.3s ease-in-out;
+}
+
+.checkbox__label {
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox__list {
+    position: relative;
+}
+
+.checkbox__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.checkbox__custom {
+    position: absolute;
+    top: 13px;
+    width: 10px;
+    height: 10px;
+    box-shadow: 0 0 0 1px #fff;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.checkbox__label:hover>.checkbox__custom {
+    box-shadow: 0 0 0 1px #8d816f;
+}
+
+.checkbox__input:checked+.checkbox__custom {
+    box-shadow: 0 0 0 1px #8d816f;
+    background-image: url(../img/checkbox-checked.svg);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+.checkbox__input:focus+.checkbox__custom {
+    box-shadow: 0 0 0 1px #8d816f;
+}
+
+.checkbox__input:focus+.checkbox__custom+.checkbox__descr {
+    color: #8d816f;
+}
+
+.checkbox__input:checked:disabled+.checkbox__custom {
+    box-shadow: 0 0 0 1px #666;
+}
+
+.checkbox__input:disabled+.checkbox__custom {
+    box-shadow: 0 0 0 1px #666;
+    background-image: url(../img/checkbox-checked-disabled.svg);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+.form__input__button {
+    padding: 10px 30px;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: #070E0C;
+    background-color: #bea990;
+    border-radius: 10px;
+    border: 1px solid #8d816f;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.form__input__button:hover {
+        background-color: #8d816f;
+}
+
+.form__input__button:focus {
+        border-color: #717070;
+}
+
+.form__input__button:active {
+        background-color: #717070;
+}
+
+.input__record {
+    flex-direction: column;
+}
+
+.input__record__descr {
+    margin: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 20px;
+    color: #070E0C;
+}
+
+.input__record__time {
+    margin-bottom: 20px;
+}
+
+.input__label {
+    display: flex;
+    flex-direction: column;
+}
+
+.input__error {
+    font-family: 'Marxiana';
+    font-weight: 400;
+    font-size: 18px;
+    color: red;
+}
+
+.weekend-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.weekend-warning p {
+    margin: 5px 0;
+}
+
+.weekend-warning p:first-child {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#appointment-time:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.documents-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}

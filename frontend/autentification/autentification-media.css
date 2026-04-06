@@ -31,6 +31,10 @@
         margin-bottom: 20px;
     }
 
+    .reg__item {
+        align-items: center;
+    }
+
     .reg__input {
         padding-top: 7px;
         padding-bottom: 7px;
