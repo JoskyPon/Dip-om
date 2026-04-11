@@ -40,8 +40,8 @@
     <section class="form">
         <div id="auth-check"></div>
         <div class="form__container">
-            <h1 class="form__title">Записаться на прием</h1>
-            <p class="form__descr">Для записи на прием в офис заполните поля с данными</p>\
+            <h1 class="form__title">Оставить заявку на оформление</h1>
+            <p class="form__descr">Для отправки заявки на оформление онлайн заполните поля с данными</p>\
             <form action="#" class="form__input input flex">
                 <div class="input__container flex">
                     <div class="input__passport flex">
@@ -203,6 +203,12 @@
                                 </label>
                             </div>
                         </div>
+                        <p class="input__record__descr">Выберите полис</p>
+                        <select id="appointment-policy" class="input__record__time">
+                        <option value="1">ОСАГО</option>
+                        <option value="2">КАСКО</option>
+                    </select>
+                    <span class="input__error"></span>
                         <button id="record-btn" class="form__input__button">Отправить на проверку</button>
                     </div>
                 </div>

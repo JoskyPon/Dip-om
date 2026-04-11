@@ -267,7 +267,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     loginBtn.addEventListener('click', function (e) {
         e.preventDefault()
-        if (login = 'admin@mail.ru') {
+        let login = document.querySelector('#aut-email').value.trim()
+        console.log(login)
+        if (login === 'admin@mail.ru') {
             loginAdmin()
         } else {
             loginUser()

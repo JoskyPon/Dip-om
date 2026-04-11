@@ -80,9 +80,10 @@ async function findOrCreateCategories(pool, selectedCategories) {
 
 // Основной контроллер для записи на приём
 export const createAppointment = async (req, res) => {
-    // Начинаем транзакцию
-    const transaction = new sql.Transaction();
-
+    console.log('📥 ПОЛУЧЕН POST ЗАПРОС /api/appointments');
+    console.log('📥 req.body:', req.body);
+    console.log('📥 req.user:', req.user);
+    
     try {
         const {
             passport,
@@ -102,7 +103,6 @@ export const createAppointment = async (req, res) => {
             appointmentPolicy
         } = req.body;
 
-        // Получаем ID текущего пользователя из токена (должен быть добавлен middleware)
         const clientId = req.user?.userId;
 
         if (!clientId) {
@@ -113,107 +113,21 @@ export const createAppointment = async (req, res) => {
         }
 
         const pool = await connectDB();
-
-        // Начинаем транзакцию
-        await transaction.begin();
-
-        const appointmentDate = new Date(dateOfVisit);
-        const dayOfWeek = appointmentDate.getDay();
-
-        if (dayOfWeek === 0 || dayOfWeek === 6) {
-            return res.status(400).json({
-                success: false,
-                error: 'Запись на приём возможна только в будние дни (пн-пт)'
-            });
-        }
-
-        // Проверяем доступность времени
-        const isAvailable = await isTimeSlotAvailable(pool, new Date(dateOfVisit));
-        if (!isAvailable) {
-            await transaction.rollback();
-            return res.status(409).json({
-                success: false,
-                error: 'Выбранное время уже занято. Пожалуйста, выберите другое время.'
-            });
-        }
-
-        const canCreate = await checkLastAppointment(pool, clientId, dateOfVisit);
-        if (!canCreate) {
-            await transaction.rollback();
-            return res.status(409).json({
-                success: false,
-                error: 'Вы можете записаться на следующий приём не раньше, чем через 24 часа после предыдущего'
-            });
-        }
-
-        // 1. РАБОТА С ПАСПОРТНЫМИ ДАННЫМИ
-        let passportId = passport;
-
-        // Проверяем, существует ли паспорт
-        const existingPassport = await pool.request()
-            .input('passport', sql.Int, passport)
-            .query('SELECT SeriesAndNumberOfPassport FROM Passport WHERE SeriesAndNumberOfPassport = @passport');
-
-        if (existingPassport.recordset.length === 0) {
-            // Создаём новый паспорт
-            await transaction.request()
-                .input('passport', sql.Int, passport)
-                .input('passportDate', sql.Date, passportDate)
-                .input('passportIssuedBy', sql.NVarChar, passportIssuedBy)
-                .query(`
-                    INSERT INTO Passport (SeriesAndNumberOfPassport, DateOfIssue, IssuedBy)
-                    VALUES (@passport, @passportDate, @passportIssuedBy)
-                `);
-        }
-
-        // 2. РАБОТА С КАТЕГОРИЯМИ ПРАВ
-        const categoriesId = await findOrCreateCategories(pool, driverLicenseCategories);
-
-        // 3. РАБОТА С ВОДИТЕЛЬСКИМ УДОСТОВЕРЕНИЕМ
-        const existingLicense = await pool.request()
-            .input('driverLicense', sql.Int, driverLicense)
-            .query('SELECT DriverLicenseNumber FROM DriverLicense WHERE DriverLicenseNumber = @driverLicense');
-
-        if (existingLicense.recordset.length === 0) {
-            // Создаём новое водительское удостоверение
-            await transaction.request()
-                .input('driverLicense', sql.Int, driverLicense)
-                .input('driverLicenseDate', sql.Date, new Date(driverLicenseDate))
-                .input('categoriesId', sql.Int, categoriesId)
-                .query(`
-                    INSERT INTO DriverLicense (DriverLicenseNumber, DateOfIssue, AvailableCategories)
-                    VALUES (@driverLicense, @driverLicenseDate, @categoriesId)
-                `);
-        }
-
-        // 4. РАБОТА С АВТОМОБИЛЕМ
+        
+        // УПРОЩЁННО: Сначала сохраняем автомобиль (если его нет)
         const existingVehicle = await pool.request()
             .input('carRegistrationNumber', sql.NVarChar, carRegistrationNumber)
             .query('SELECT RegistrationNumber FROM Vehicle WHERE RegistrationNumber = @carRegistrationNumber');
 
         if (existingVehicle.recordset.length === 0) {
-            // Проверяем VIN на уникальность
-            const existingVIN = await pool.request()
-                .input('carVIN', sql.NVarChar, carVIN)
-                .query('SELECT VINNumber FROM Vehicle WHERE VINNumber = @carVIN');
-
-            if (existingVIN.recordset.length > 0) {
-                await transaction.rollback();
-                return res.status(409).json({
-                    success: false,
-                    error: 'Автомобиль с таким VIN номером уже зарегистрирован в системе'
-                });
-            }
-
-            // Создаём новый автомобиль
-            await transaction.request()
+            await pool.request()
                 .input('carRegistrationNumber', sql.NVarChar, carRegistrationNumber)
                 .input('carVIN', sql.NVarChar, carVIN)
                 .input('carBrand', sql.NVarChar, carBrand)
                 .input('carModel', sql.NVarChar, carModel)
                 .input('carDate', sql.Int, parseInt(carDate))
                 .input('carSTS', sql.NVarChar, carSTS)
-                .input('enginePower', sql.Int, carPower)
+                .input('enginePower', sql.Int, carPower || 100)
                 .query(`
                     INSERT INTO Vehicle (
                         RegistrationNumber, VINNumber, VehicleBrand, VehicleModel, 
@@ -224,41 +138,36 @@ export const createAppointment = async (req, res) => {
                         @carDate, @enginePower, @carSTS
                     )
                 `);
+            console.log('✅ Автомобиль добавлен');
         }
 
-        // 5. ОБНОВЛЯЕМ ДАННЫЕ КЛИЕНТА
-        await transaction.request()
+        // Обновляем данные клиента
+        await pool.request()
             .input('clientId', sql.Int, clientId)
-            .input('passport', sql.Int, passport)
-            .input('driverLicense', sql.Int, driverLicense)
             .input('carRegistrationNumber', sql.NVarChar, carRegistrationNumber)
             .query(`
                 UPDATE Client 
-                SET SeriesAndNumberOfPassport = @passport,
-                    DriverLicenseNumber = @driverLicense,
-                    RegistrationNumber = @carRegistrationNumber
+                SET RegistrationNumber = @carRegistrationNumber
                 WHERE ClientId = @clientId
             `);
 
-        // 6. СОЗДАЁМ ЗАЯВКУ НА ПРИЁМ
-        // Находим доступного сотрудника
+        // Находим сотрудника
         const employeeResult = await pool.request()
             .input('postId', sql.Int, 2)
             .query(`
-        SELECT TOP 1 EmployeeId 
-        FROM Employee 
-        WHERE Post = @postId
-        ORDER BY EmployeeId  -- Сортировка по ID (или другому полю)
-    `);
+                SELECT TOP 1 EmployeeId 
+                FROM Employee 
+                WHERE Post = @postId
+            `);
 
         const employeeId = employeeResult.recordset[0]?.EmployeeId || 1;
 
         // Создаём заявку
-        const applicationResult = await transaction.request()
+        const applicationResult = await pool.request()
             .input('clientId', sql.Int, clientId)
             .input('employeeId', sql.Int, employeeId)
             .input('carRegistrationNumber', sql.NVarChar, carRegistrationNumber)
-            .input('productId', sql.Int, appointmentPolicy)
+            .input('productId', sql.Int, appointmentPolicy || 1)
             .input('appointmentDate', sql.DateTime, new Date(dateOfVisit))
             .input('status', sql.NVarChar, 'Ожидание')
             .query(`
@@ -274,11 +183,8 @@ export const createAppointment = async (req, res) => {
             `);
 
         const applicationId = applicationResult.recordset[0].ApplicationId;
+        console.log(`✅ Заявка ${applicationId} создана`);
 
-        // Подтверждаем транзакцию
-        await transaction.commit();
-
-        // Успешный ответ
         res.status(201).json({
             success: true,
             message: 'Запись на приём успешно создана',
@@ -288,37 +194,10 @@ export const createAppointment = async (req, res) => {
         });
 
     } catch (error) {
-        // Откатываем транзакцию в случае ошибки
-        if (transaction) {
-            try {
-                await transaction.rollback();
-            } catch (rollbackError) {
-                console.error('Ошибка при откате транзакции:', rollbackError);
-            }
-        }
-
         console.error('❌ Ошибка создания записи на приём:', error);
-
-        // Определяем тип ошибки для понятного ответа
-        if (error.number === 2627 || error.number === 2601) {
-            // Ошибка уникальности (дубликат)
-            return res.status(409).json({
-                success: false,
-                error: 'Некоторые данные уже существуют в системе. Проверьте уникальность полей.'
-            });
-        }
-
-        if (error.number === 547) {
-            // Ошибка внешнего ключа
-            return res.status(400).json({
-                success: false,
-                error: 'Нарушение целостности данных. Проверьте введённые данные.'
-            });
-        }
-
         res.status(500).json({
             success: false,
-            error: 'Внутренняя ошибка сервера при создании записи'
+            error: 'Внутренняя ошибка сервера при создании записи: ' + error.message
         });
     }
 };

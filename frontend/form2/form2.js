@@ -228,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const carDate = document.getElementById('car-date')?.value;
         const carSTS = document.getElementById('car-STS')?.value.trim();
         const carPower = document.getElementById('car-power')?.value;
+        const appointmentPolicy = document.querySelector('#appointment-policy').value
         
         // Проверка обязательных полей
         if (!passport || !passportDate || !issuedBy || !driverLicense || !driverLicenseDate || 
@@ -270,6 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('carDate', carDate);
         formData.append('carSTS', carSTS);
         formData.append('carPower', carPower);
+        formData.append('appointmentPolicy', appointmentPolicy);
         
         submitBtn.disabled = true;
         submitBtn.textContent = 'Отправка...';

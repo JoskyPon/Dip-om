@@ -110,24 +110,24 @@ async function loadAppointments(filters = {}) {
 // Отображение записей в таблице
 function renderAppointments(appointments) {
     const container = document.getElementById('appointments-container');
-    
+
     if (!appointments || appointments.length === 0) {
         container.innerHTML = '<div class="no-data">Нет записей по заданным критериям</div>';
         return;
     }
-    
+
     const statusClass = {
         'Ожидание': 'status-pending',
         'Завершено': 'status-completed',
         'Отменено': 'status-cancelled'
     };
-    
+
     const statusText = {
         'Ожидание': '⏳ В ожидании',
         'Завершено': '✅ Завершено',
         'Отменено': '❌ Отменено'
     };
-    
+
     let html = `
         <table class="appointments-table">
             <thead>
@@ -142,7 +142,7 @@ function renderAppointments(appointments) {
             </thead>
             <tbody>
     `;
-    
+
     appointments.forEach(apt => {
         const date = new Date(apt.applicationDate);
         const formattedDate = date.toLocaleString('ru-RU', {
@@ -152,7 +152,7 @@ function renderAppointments(appointments) {
             hour: '2-digit',
             minute: '2-digit'
         });
-        
+
         html += `
             <tr>
                 <td>${formattedDate}</td>
@@ -172,67 +172,67 @@ function renderAppointments(appointments) {
                 <td class="actions-cell">
                     <button class="view-details" data-id="${apt.applicationId}">📋 Подробнее</button>
         `;
-        
+
         // Кнопка "Отменить" только для записей со статусом "Ожидание"
         if (apt.status === 'Ожидание') {
             html += `<button class="cancel-appointment" data-id="${apt.applicationId}" data-name="${apt.client.fullName}">❌ Отменить</button>`;
         }
-        
+
         // Кнопка "Восстановить" для отменённых записей
         if (apt.status === 'Отменено') {
             html += `<button class="restore-appointment" data-id="${apt.applicationId}" data-name="${apt.client.fullName}">🔄 Восстановить</button>`;
         }
-        
+
         // Кнопка "Завершить" для записей в ожидании
         if (apt.status === 'Ожидание') {
             html += `<button class="complete-appointment" data-id="${apt.applicationId}" data-name="${apt.client.fullName}">✅ Завершить</button>`;
         }
-        
+
         html += `</td></tr>`;
     });
-    
+
     html += `
             </tbody>
         </table>
     `;
-    
+
     container.innerHTML = html;
-    
+
     // Обработчики для кнопок "Подробнее"
     document.querySelectorAll('.view-details').forEach(btn => {
         btn.addEventListener('click', () => showAppointmentDetails(btn.dataset.id));
     });
-    
+
     // Обработчики для кнопок "Отменить"
     document.querySelectorAll('.cancel-appointment').forEach(btn => {
         btn.addEventListener('click', () => {
             const appointmentId = btn.dataset.id;
             const clientName = btn.dataset.name;
-            
+
             if (confirm(`Вы уверены, что хотите отменить запись клиента "${clientName}"?`)) {
                 updateAppointmentStatus(appointmentId, 'Отменено');
             }
         });
     });
-    
+
     // Обработчики для кнопок "Восстановить"
     document.querySelectorAll('.restore-appointment').forEach(btn => {
         btn.addEventListener('click', () => {
             const appointmentId = btn.dataset.id;
             const clientName = btn.dataset.name;
-            
+
             if (confirm(`Восстановить запись клиента "${clientName}"?`)) {
                 updateAppointmentStatus(appointmentId, 'Ожидание');
             }
         });
     });
-    
+
     // Обработчики для кнопок "Завершить"
     document.querySelectorAll('.complete-appointment').forEach(btn => {
         btn.addEventListener('click', () => {
             const appointmentId = btn.dataset.id;
             const clientName = btn.dataset.name;
-            
+
             if (confirm(`Подтвердить завершение записи клиента "${clientName}"?`)) {
                 updateAppointmentStatus(appointmentId, 'Завершено');
             }
@@ -366,7 +366,7 @@ function logout() {
 
 async function updateAppointmentStatus(appointmentId, newStatus) {
     const token = localStorage.getItem('token');
-    
+
     try {
         const response = await fetch(`${API_URL}/admin/appointments/${appointmentId}/status`, {
             method: 'PUT',
@@ -376,9 +376,9 @@ async function updateAppointmentStatus(appointmentId, newStatus) {
             },
             body: JSON.stringify({ status: newStatus })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             alert(`✅ ${data.message}`);
             // Перезагружаем текущий список записей
@@ -412,9 +412,9 @@ async function loadDocumentsForVerification() {
     const token = localStorage.getItem('token');
     const container = document.getElementById('documents-container');
     container.innerHTML = '<div class="loading">Загрузка заявок...</div>';
-    
+
     console.log('🔄 Загрузка заявок на верификацию...');
-    
+
     try {
         const response = await fetch(`${API_URL}/documents/pending-verification`, {
             method: 'GET',
@@ -425,12 +425,12 @@ async function loadDocumentsForVerification() {
                 'Expires': '0'
             }
         });
-        
+
         console.log('📡 Статус ответа:', response.status);
-        
+
         const data = await response.json();
         console.log('📥 Данные от сервера:', data);
-        
+
         if (data.success) {
             console.log(`✅ Найдено заявок: ${data.applications?.length || 0}`);
             console.log('🎨 Вызов renderDocumentsForVerification с данными:', data.applications);
@@ -448,51 +448,51 @@ async function loadDocumentsForVerification() {
 // Отображение заявок на верификацию
 function renderDocumentsForVerification(applications) {
     console.log('🎨 Рендеринг заявок, получено:', applications.length);
-    
+
     const container = document.querySelector('#documents-container');
-    
+
     if (!container) {
         console.error('❌ Контейнер documents-container не найден!');
         return;
     }
-    
+
     if (!applications || applications.length === 0) {
         container.innerHTML = '<div class="no-data">Нет заявок, ожидающих проверки документов</div>';
         return;
     }
-    
+
     // Очищаем контейнер
     container.innerHTML = '';
-    
+
     // Создаём карточки вручную через createElement
     applications.forEach((app) => {
         // Основная карточка
         const card = document.createElement('div');
         card.className = 'verification-card';
         card.style.cssText = 'background: white; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow: hidden;';
-        
+
         // Заголовок карточки
         const cardHeader = document.createElement('div');
         cardHeader.className = 'card-header';
         cardHeader.style.cssText = 'background: #f8f9fa; padding: 15px 20px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;';
-        
+
         const title = document.createElement('h3');
         title.textContent = `Заявка №${app.applicationId}`;
         title.style.margin = '0';
-        
+
         const statusSpan = document.createElement('span');
         statusSpan.className = 'status-badge status-pending';
         statusSpan.style.cssText = 'background: #fff3cd; color: #856404; padding: 4px 8px; border-radius: 4px; font-size: 12px;';
         statusSpan.textContent = app.isDocumentsVerified ? 'Проверено' : 'Ожидает проверки';
-        
+
         cardHeader.appendChild(title);
         cardHeader.appendChild(statusSpan);
-        
+
         // Тело карточки
         const cardBody = document.createElement('div');
         cardBody.className = 'card-body';
         cardBody.style.cssText = 'padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;';
-        
+
         // Информация о клиенте
         const clientInfo = document.createElement('div');
         clientInfo.className = 'client-info';
@@ -504,89 +504,97 @@ function renderDocumentsForVerification(applications) {
             <p><strong>Email:</strong> ${app.client?.email || '—'}</p>
             <p><strong>Дата заявки:</strong> ${new Date(app.applicationDate).toLocaleString('ru-RU')}</p>
         `;
-        
-        // Информация об автомобиле
-        const vehicleInfo = document.createElement('div');
-        vehicleInfo.className = 'vehicle-info';
-        vehicleInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
-        vehicleInfo.innerHTML = `
+
+        let productName = '';
+        switch (app.productId) {
+            case 1: productName = 'ОСАГО'; break;
+            case 2: productName = 'КАСКО'; break;
+            default: productName = 'ОСАГО';
+        }
+
+                // Информация об автомобиле
+                const vehicleInfo = document.createElement('div');
+                vehicleInfo.className = 'vehicle-info';
+                vehicleInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
+                vehicleInfo.innerHTML = `
             <h4 style="margin-top: 0; margin-bottom: 10px; color: #667eea;">Автомобиль</h4>
             <p><strong>Госномер:</strong> ${app.vehicle?.registrationNumber || '—'}</p>
             <p><strong>Марка/Модель:</strong> ${app.vehicle?.brand || '—'} ${app.vehicle?.model || '—'}</p>
             <p><strong>Год:</strong> ${app.vehicle?.year || '—'}</p>
             <p><strong>VIN:</strong> ${app.vehicle?.vin || '—'}</p>
+            <p><strong>Тип полиса:</strong> ${productName}</p>
         `;
-        
-        // Документы
-        const documentsInfo = document.createElement('div');
-        documentsInfo.className = 'documents-info';
-        documentsInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
-        
-        let documentsHtml = '<h4 style="margin-top: 0; margin-bottom: 10px; color: #667eea;">Документы для проверки</h4><div class="documents-grid">';
-        
-        documentsHtml += app.documents?.passport 
-            ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
+
+                // Документы
+                const documentsInfo = document.createElement('div');
+                documentsInfo.className = 'documents-info';
+                documentsInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
+
+                let documentsHtml = '<h4 style="margin-top: 0; margin-bottom: 10px; color: #667eea;">Документы для проверки</h4><div class="documents-grid">';
+
+                documentsHtml += app.documents?.passport
+                    ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
                 <span>📄 Паспорт</span>
                 <a href="http://localhost:3001${app.documents.passport.path}" target="_blank" style="color: #3498db; text-decoration: none;">Просмотреть</a>
                </div>`
-            : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ Паспорт не загружен</div>';
-        
-        documentsHtml += app.documents?.driverLicense 
-            ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
+                    : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ Паспорт не загружен</div>';
+
+                documentsHtml += app.documents?.driverLicense
+                    ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
                 <span>🚗 Водительское удостоверение</span>
                 <a href="http://localhost:3001${app.documents.driverLicense.path}" target="_blank" style="color: #3498db; text-decoration: none;">Просмотреть</a>
                </div>`
-            : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ ВУ не загружено</div>';
-        
-        documentsHtml += app.documents?.sts 
-            ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
+                    : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ ВУ не загружено</div>';
+
+                documentsHtml += app.documents?.sts
+                    ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
                 <span>📋 СТС</span>
                 <a href="http://localhost:3001${app.documents.sts.path}" target="_blank" style="color: #3498db; text-decoration: none;">Просмотреть</a>
                </div>`
-            : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ СТС не загружен</div>';
-        
-        documentsHtml += '</div>';
-        documentsInfo.innerHTML = documentsHtml;
-        
-        cardBody.appendChild(clientInfo);
-        cardBody.appendChild(vehicleInfo);
-        cardBody.appendChild(documentsInfo);
-        
-        // Кнопки действий
-        const cardActions = document.createElement('div');
-        cardActions.className = 'card-actions';
-        cardActions.style.cssText = 'padding: 15px 20px; background: #f8f9fa; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; justify-content: flex-end;';
-        
-        const verifyBtn = document.createElement('button');
-        verifyBtn.textContent = '✅ Подтвердить и создать полис';
-        verifyBtn.style.cssText = 'background: #2ecc71; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
-        verifyBtn.onclick = () => verifyDocuments(app.applicationId, true);
-        
-        const rejectBtn = document.createElement('button');
-        rejectBtn.textContent = '❌ Отклонить';
-        rejectBtn.style.cssText = 'background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
-        rejectBtn.onclick = () => verifyDocuments(app.applicationId, false);
-        
-        cardActions.appendChild(verifyBtn);
-        cardActions.appendChild(rejectBtn);
-        
-        card.appendChild(cardHeader);
-        card.appendChild(cardBody);
-        card.appendChild(cardActions);
-        
-        container.appendChild(card);
-    });
-    
+                    : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ СТС не загружен</div>';
+
+                documentsHtml += '</div>';
+                documentsInfo.innerHTML = documentsHtml;
+
+                cardBody.appendChild(clientInfo);
+                cardBody.appendChild(vehicleInfo);
+                cardBody.appendChild(documentsInfo);
+
+                // Кнопки действий
+                const cardActions = document.createElement('div');
+                cardActions.className = 'card-actions';
+                cardActions.style.cssText = 'padding: 15px 20px; background: #f8f9fa; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; justify-content: flex-end;';
+
+                const verifyBtn = document.createElement('button');
+                verifyBtn.textContent = '✅ Подтвердить и создать полис';
+                verifyBtn.style.cssText = 'background: #2ecc71; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
+                verifyBtn.onclick = () => verifyDocuments(app.applicationId, true);
+
+                const rejectBtn = document.createElement('button');
+                rejectBtn.textContent = '❌ Отклонить';
+                rejectBtn.style.cssText = 'background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
+                rejectBtn.onclick = () => verifyDocuments(app.applicationId, false);
+
+                cardActions.appendChild(verifyBtn);
+                cardActions.appendChild(rejectBtn);
+
+                card.appendChild(cardHeader);
+                card.appendChild(cardBody);
+                card.appendChild(cardActions);
+
+                container.appendChild(card);
+        });
+
     console.log('✅ Рендеринг завершён, добавлено карточек:', applications.length);
 }
-    
-    document.querySelectorAll('.reject-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const id = btn.dataset.id;
-            console.log('❌ Нажата кнопка отклонения для заявки:', id);
-            verifyDocuments(id, false);
-        });
+
+document.querySelectorAll('.reject-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        console.log('❌ Нажата кнопка отклонения для заявки:', id);
+        verifyDocuments(id, false);
     });
+});
 
 
 // Верификация документов
@@ -594,13 +602,13 @@ async function verifyDocuments(applicationId, isVerified) {
     const token = localStorage.getItem('token');
     const verifyBtn = document.querySelector(`.verify-btn[data-id="${applicationId}"]`);
     const rejectBtn = document.querySelector(`.reject-btn[data-id="${applicationId}"]`);
-    
+
     if (verifyBtn) {
         verifyBtn.disabled = true;
         verifyBtn.textContent = '⏳ Обработка...';
     }
     if (rejectBtn) rejectBtn.disabled = true;
-    
+
     try {
         const response = await fetch(`${API_URL}/documents/verify/${applicationId}`, {
             method: 'PUT',
@@ -610,9 +618,9 @@ async function verifyDocuments(applicationId, isVerified) {
             },
             body: JSON.stringify({ isVerified })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             if (isVerified) {
                 alert(`✅ ${data.message}\nНомер полиса: ${data.policyNumber}\nEmail отправлен: ${data.client.email}`);
@@ -645,7 +653,7 @@ async function verifyDocuments(applicationId, isVerified) {
 // Отправка email с полисом
 async function sendPolicyEmail(applicationId) {
     const token = localStorage.getItem('token');
-    
+
     try {
         const response = await fetch(`${API_URL}/documents/send-policy/${applicationId}`, {
             method: 'POST',
@@ -654,9 +662,9 @@ async function sendPolicyEmail(applicationId) {
                 'Content-Type': 'application/json'
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             console.log('✅ Email отправлен:', data.email);
         } else {
@@ -671,19 +679,19 @@ async function sendPolicyEmail(applicationId) {
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const tab = btn.dataset.tab;
-        
+
         console.log('🔄 Переключение на вкладку:', tab);
-        
+
         // Убираем активный класс у всех кнопок
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        
+
         // Скрываем все вкладки
         document.querySelectorAll('.tab-content').forEach(content => {
             content.classList.remove('active');
             content.style.display = 'none'; // Явно скрываем
         });
-        
+
         // Показываем выбранную вкладку
         let activeTab = null;
         if (tab === 'appointments') {
@@ -693,12 +701,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         } else if (tab === 'documents') {
             activeTab = document.getElementById('tab-documents');
         }
-        
+
         if (activeTab) {
             activeTab.classList.add('active');
             activeTab.style.display = 'block'; // Явно показываем
             console.log(`✅ Вкладка ${tab} активирована, display: ${activeTab.style.display}`);
-            
+
             // Загружаем данные для соответствующих вкладок
             if (tab === 'appointments') {
                 loadAppointments();
@@ -746,13 +754,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             const container = document.getElementById('documents-container');
-console.log('Содержимое контейнера:', container.innerHTML);
-console.log('Длина HTML:', container.innerHTML.length);
-console.log('Контейнер видим?', container.style.display);
-console.log('Родитель видим?', container.parentElement.style.display);
-const tabr = document.getElementById('tab-documents');
-console.log('Вкладка имеет класс active?', tabr.classList.contains('active'));
-console.log('Стиль display вкладки:', window.getComputedStyle(tabr).display);
+            console.log('Содержимое контейнера:', container.innerHTML);
+            console.log('Длина HTML:', container.innerHTML.length);
+            console.log('Контейнер видим?', container.style.display);
+            console.log('Родитель видим?', container.parentElement.style.display);
+            const tabr = document.getElementById('tab-documents');
+            console.log('Вкладка имеет класс active?', tabr.classList.contains('active'));
+            console.log('Стиль display вкладки:', window.getComputedStyle(tabr).display);
         });
     });
 
@@ -803,67 +811,67 @@ console.log('Стиль display вкладки:', window.getComputedStyle(tabr).
     });
 
     function initTabs() {
-    console.log('🔧 Инициализация вкладок...');
-    
-    const tabs = document.querySelectorAll('.tab-btn');
-    const contents = document.querySelectorAll('.tab-content');
-    
-    console.log(`Найдено кнопок: ${tabs.length}, контентов: ${contents.length}`);
-    
-    // Скрываем все вкладки
-    contents.forEach(content => {
-        content.style.display = 'none';
-        content.classList.remove('active');
-    });
-    
-    // Показываем первую вкладку (appointments)
-    const firstTab = document.getElementById('tab-appointments');
-    if (firstTab) {
-        firstTab.style.display = 'block';
-        firstTab.classList.add('active');
-    }
-    
-    // Добавляем обработчики
-    tabs.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabName = btn.dataset.tab;
-            console.log(`📌 Клик по вкладке: ${tabName}`);
-            
-            // Убираем активность со всех кнопок
-            tabs.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Скрываем все контенты
-            contents.forEach(content => {
-                content.style.display = 'none';
-                content.classList.remove('active');
-            });
-            
-            // Показываем выбранный контент
-            const activeContent = document.getElementById(`tab-${tabName}`);
-            if (activeContent) {
-                activeContent.style.display = 'block';
-                activeContent.classList.add('active');
-                console.log(`✅ Показана вкладка: ${tabName}`);
-                
-                // Загружаем данные
-                if (tabName === 'appointments') {
-                    loadAppointments();
-                } else if (tabName === 'documents') {
-                    loadDocumentsForVerification();
-                }
-            } else {
-                console.error(`❌ Контент для вкладки ${tabName} не найден`);
-            }
-        });
-    });
-}
+        console.log('🔧 Инициализация вкладок...');
 
-// Вызовите initTabs после загрузки DOM
-document.addEventListener('DOMContentLoaded', () => {
-    initTabs();
-    // ... остальная инициализация
-});
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+
+        console.log(`Найдено кнопок: ${tabs.length}, контентов: ${contents.length}`);
+
+        // Скрываем все вкладки
+        contents.forEach(content => {
+            content.style.display = 'none';
+            content.classList.remove('active');
+        });
+
+        // Показываем первую вкладку (appointments)
+        const firstTab = document.getElementById('tab-appointments');
+        if (firstTab) {
+            firstTab.style.display = 'block';
+            firstTab.classList.add('active');
+        }
+
+        // Добавляем обработчики
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                console.log(`📌 Клик по вкладке: ${tabName}`);
+
+                // Убираем активность со всех кнопок
+                tabs.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Скрываем все контенты
+                contents.forEach(content => {
+                    content.style.display = 'none';
+                    content.classList.remove('active');
+                });
+
+                // Показываем выбранный контент
+                const activeContent = document.getElementById(`tab-${tabName}`);
+                if (activeContent) {
+                    activeContent.style.display = 'block';
+                    activeContent.classList.add('active');
+                    console.log(`✅ Показана вкладка: ${tabName}`);
+
+                    // Загружаем данные
+                    if (tabName === 'appointments') {
+                        loadAppointments();
+                    } else if (tabName === 'documents') {
+                        loadDocumentsForVerification();
+                    }
+                } else {
+                    console.error(`❌ Контент для вкладки ${tabName} не найден`);
+                }
+            });
+        });
+    }
+
+    // Вызовите initTabs после загрузки DOM
+    document.addEventListener('DOMContentLoaded', () => {
+        initTabs();
+        // ... остальная инициализация
+    });
 
     // Выход
     document.getElementById('logout-btn').addEventListener('click', logout);

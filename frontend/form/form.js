@@ -176,6 +176,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const recordButton = document.querySelector('#record-btn')
 
+     if (!recordButton) {
+        console.error('❌ Кнопка с id="record-btn" не найдена!');
+        return;
+    }
+
+      console.log('✅ Кнопка найдена:', recordButton);
+
     // Обработчик изменения даты
     document.getElementById('appointment-date').addEventListener('change', function (e) {
         const selectedDate = e.target.value;
@@ -247,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!driverLicense) {
             itemError[3].innerHTML = 'Поле не может быть пустым'
         } else if (driverLicense.length !== 10) {
-            itemError[3].innerHTML = 'Серия и номер паспорта должны состоять из 10 цифр'
+            itemError[3].innerHTML = 'Номер ВУ должен состоять из 10 цифр'
         } else {
             itemError[3].innerHTML = ''
         }
@@ -343,13 +350,7 @@ document.addEventListener('DOMContentLoaded', function () {
             itemError[13].style.cssText = 'margin-bottom: 0'
         }
 
-        //Прерывание отправки формы если есть хотя бы одна ошибка
-        for (let i = 0; i <= 13; i++) {
-            console.log(itemError[i])
-            if (itemError[i] !== '') {
-                return
-            }
-        }
+        
 
         const token = localStorage.getItem('token');
 
@@ -395,21 +396,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     recordButton.addEventListener('click', function (e) {
-        e.preventDefault()
-
+        e.preventDefault();
+        console.log('🖱️ Кнопка нажата!');
+        
         const timeSelect = document.getElementById('appointment-time');
+        
+        if (!timeSelect) {
+            console.error('❌ Элемент appointment-time не найден');
+            alert('Ошибка: не найден элемент выбора времени');
+            return;
+        }
+        
+        console.log('timeSelect.value:', timeSelect.value);
+        
         if (timeSelect.value === '1' || timeSelect.value === 'Нет свободного времени') {
             alert('Пожалуйста, выберите доступное время');
             return;
         }
-
+        
         const date = document.getElementById('appointment-date').value;
         const time = timeSelect.value;
-
-        // Объединяем дату и время для отправки на сервер
         const appointmentDateTime = `${date}T${time}:00`;
-        console.log('Выбрано время:', appointmentDateTime);
-
-        recordUser(appointmentDateTime)
+        console.log('Выбрано время для отправки:', appointmentDateTime);
+        
+        recordUser(appointmentDateTime);
     })
 })

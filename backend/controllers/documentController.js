@@ -33,7 +33,7 @@ export const uploadUserDocuments = async (req, res) => {
             passport, passportDate, passportIssuedBy,
             driverLicense, driverLicenseDate, driverLicenseCategories,
             carRegistrationNumber, carVIN, carBrand, carModel,
-            carDate, carSTS, carPower
+            carDate, carSTS, carPower, appointmentPolicy
         } = req.body;
 
         // Проверяем обязательные поля
@@ -94,7 +94,7 @@ export const uploadUserDocuments = async (req, res) => {
         const applicationResult = await pool.request()
             .input('clientId', sql.Int, userId)
             .input('employeeId', sql.Int, 11)
-            .input('productId', sql.Int, 1)
+            .input('productId', sql.Int, parseInt(appointmentPolicy) || 1)
             .input('registrationNumber', sql.NVarChar, carRegistrationNumber)
             .input('status', sql.NVarChar, 'Ожидание документов')
             .query(`
@@ -326,6 +326,8 @@ export const getDocumentsForVerification = async (req, res) => {
                 afr.Status,
                 afr.ApplicationDate,
                 afr.IsDocumentsVerified,
+                afr.ProductId,
+                ip.ProductName,
                 c.ClientId,
                 c.ClientSurname,
                 c.ClientName,
@@ -343,9 +345,10 @@ export const getDocumentsForVerification = async (req, res) => {
                 dld.DocumentPath as DriverLicensePath,
                 sd.DocumentId as StsDocId,
                 sd.DocumentPath as StsPath
-            FROM ApplicationForRegistration afr
+             FROM ApplicationForRegistration afr
             JOIN Client c ON afr.ClientId = c.ClientId
             LEFT JOIN Vehicle v ON afr.RegistrationNumber = v.RegistrationNumber
+            LEFT JOIN InsuranceProduct ip ON afr.ProductId = ip.ProductId
             LEFT JOIN UserDocuments pd ON afr.PassportDocumentId = pd.DocumentId
             LEFT JOIN UserDocuments dld ON afr.DriverLicenseDocumentId = dld.DocumentId
             LEFT JOIN UserDocuments sd ON afr.StsDocumentId = sd.DocumentId
@@ -369,6 +372,8 @@ export const getDocumentsForVerification = async (req, res) => {
             status: row.Status,
             applicationDate: row.ApplicationDate,
             isDocumentsVerified: row.IsDocumentsVerified,
+            productId: row.ProductId,
+            productName: row.ProductName,
             client: {
                 id: row.ClientId,
                 surname: row.ClientSurname,
@@ -409,6 +414,80 @@ export const getDocumentsForVerification = async (req, res) => {
         });
     }
 };
+
+// Функция для отправки уведомления об отказе
+async function sendRejectionEmail(clientEmail, clientName, applicationId) {
+    try {
+        console.log(`📧 Отправка уведомления об отказе на ${clientEmail}...`);
+        
+        const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: process.env.EMAIL_PORT == '465',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD
+            },
+            tls: {
+                rejectUnauthorized: false
+            },
+            connectionTimeout: 10000,
+            greetingTimeout: 10000,
+            socketTimeout: 15000,
+            debug: false
+        });
+        
+        const mailOptions = {
+            from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
+            to: clientEmail,
+            subject: `❌ Отказ в оформлении страхового полиса`,
+            html: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Отказ в оформлении полиса</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+                        .header { background: #e74c3c; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { padding: 20px; }
+                        .footer { text-align: center; padding: 15px; font-size: 12px; color: #666; border-top: 1px solid #ddd; margin-top: 20px; }
+                        .rejection-code { font-size: 24px; color: #e74c3c; font-weight: bold; text-align: center; margin: 20px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2>Отказ в оформлении полиса</h2>
+                        </div>
+                        <div class="content">
+                            <p>Уважаемый(ая) <strong>${clientName}</strong>!</p>
+                            <p>Ваша заявка №${applicationId} на оформление страхового полиса отклонена.</p>
+                            <div class="rejection-code">
+                                ❌ ОТКАЗАНО
+                            </div>
+                            <p>Вы можете подать новую заявку через личный кабинет.</p>
+                            <p>С уважением,<br>Команда АвтоСтрах</p>
+                        </div>
+                        <div class="footer">
+                            <p>Это автоматическое сообщение, пожалуйста, не отвечайте на него.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `
+        };
+        
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`✅ Уведомление об отказе отправлено на ${clientEmail}, ID: ${info.messageId}`);
+        return true;
+        
+    } catch (error) {
+        console.error(`❌ Ошибка отправки уведомления об отказе:`, error.message);
+        return false;
+    }
+}
 
 // Подтверждение документов администратором и создание полиса
 export const verifyDocumentsAndCreatePolicy = async (req, res) => {
@@ -451,6 +530,8 @@ export const verifyDocumentsAndCreatePolicy = async (req, res) => {
         }
 
         const app = application.recordset[0];
+
+        const productId = app.ProductId || 1;
 
         // 2. Находим или создаём запись сотрудника для администратора
         let employeeId;
@@ -512,9 +593,18 @@ export const verifyDocumentsAndCreatePolicy = async (req, res) => {
                     WHERE ApplicationId = @appId
                 `);
 
+                let emailSent = false;
+            if (app.ClientEmail) {
+                const clientName = `${app.ClientSurname} ${app.ClientName} ${app.ClientPatronymic || ''}`.trim();
+                emailSent = await sendRejectionEmail(app.ClientEmail, clientName, applicationId);
+            }
+
             return res.json({
                 success: true,
-                message: 'Документы отклонены. Пользователь уведомлён.'
+                message: emailSent 
+                    ? 'Документы отклонены. Уведомление отправлено клиенту.'
+                    : 'Документы отклонены, но email не отправлен',
+                emailSent: emailSent
             });
         }
 
@@ -619,6 +709,14 @@ export const verifyDocumentsAndCreatePolicy = async (req, res) => {
                     console.log(`🔧 Очищенный госномер: "${cleanRegistrationNumber}"`);
                 }
 
+                let policyTypeName = 'ОСАГО';
+                let policyTypeDetails = 'Обязательное страхование гражданской ответственности';
+
+                if (app.ProductId === 2) {
+                    policyTypeName = 'КАСКО';
+                    policyTypeDetails = 'Добровольное страхование от ущерба и угона';
+                }
+
                 const transporter = nodemailer.createTransport({
                     host: process.env.EMAIL_HOST,
                     port: parseInt(process.env.EMAIL_PORT),
@@ -666,6 +764,7 @@ export const verifyDocumentsAndCreatePolicy = async (req, res) => {
                             <div class="policy-number">
                                 № ${newPolicyNumber}
                             </div>
+                            <p><strong>Тип полиса:</strong> ${policyTypeName} (${policyTypeDetails})</p>
                             <p><strong>Дата начала действия:</strong> ${startDate.toLocaleDateString('ru-RU')}</p>
                             <p><strong>Дата окончания действия:</strong> ${endDate.toLocaleDateString('ru-RU')}</p>
                             <p><strong>Транспортное средство:</strong> ${app.VehicleBrand} ${app.VehicleModel}</p>

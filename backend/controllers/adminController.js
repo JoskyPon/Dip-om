@@ -283,6 +283,78 @@ export const searchUsers = async (req, res) => {
     }
 };
 
+async function sendCancellationEmail(clientEmail, clientName, applicationId, appointmentDate) {
+    try {
+        console.log(`📧 Отправка уведомления об отмене записи на ${clientEmail}...`);
+        
+        // Динамический импорт nodemailer
+        const nodemailer = await import('nodemailer');
+        
+        const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: process.env.EMAIL_PORT == '465',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD
+            },
+            tls: { rejectUnauthorized: false },
+            connectionTimeout: 10000,
+            greetingTimeout: 10000,
+            socketTimeout: 15000
+        });
+        
+        const formattedDate = appointmentDate ? new Date(appointmentDate).toLocaleString('ru-RU') : 'не указана';
+        
+        const mailOptions = {
+            from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
+            to: clientEmail,
+            subject: `❌ Отмена записи на приём`,
+            html: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Отмена записи</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+                        .header { background: #e74c3c; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { padding: 20px; }
+                        .footer { text-align: center; padding: 15px; font-size: 12px; color: #666; border-top: 1px solid #ddd; margin-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2>Отмена записи на приём</h2>
+                        </div>
+                        <div class="content">
+                            <p>Уважаемый(ая) <strong>${clientName}</strong>!</p>
+                            <p>Ваша запись на приём №${applicationId} отменена.</p>
+                            <p><strong>Дата записи:</strong> ${formattedDate}</p>
+                            <p>Вы можете записаться повторно через личный кабинет.</p>
+                            <p>С уважением,<br>Команда АвтоСтрах</p>
+                        </div>
+                        <div class="footer">
+                            <p>Это автоматическое сообщение, пожалуйста, не отвечайте на него.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `
+        };
+        
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`✅ Уведомление об отмене отправлено на ${clientEmail}, ID: ${info.messageId}`);
+        return true;
+        
+    } catch (error) {
+        console.error(`❌ Ошибка отправки уведомления об отмене:`, error.message);
+        return false;
+    }
+}
+
 // 4. Обновить статус записи
 export const updateAppointmentStatus = async (req, res) => {
     try {
@@ -299,19 +371,32 @@ export const updateAppointmentStatus = async (req, res) => {
 
         const pool = await connectDB();
 
-        // Получаем текущую запись для логирования
-        const currentAppointment = await pool.request()
+        // Получаем полную информацию о записи (включая данные клиента)
+        const appointmentInfo = await pool.request()
             .input('id', sql.Int, id)
-            .query('SELECT Status FROM ApplicationForRegistration WHERE ApplicationId = @id');
+            .query(`
+                SELECT 
+                    afr.ApplicationId,
+                    afr.ApplicationDate,
+                    afr.Status,
+                    c.ClientEmail,
+                    c.ClientSurname,
+                    c.ClientName,
+                    c.ClientPatronymic
+                FROM ApplicationForRegistration afr
+                JOIN Client c ON afr.ClientId = c.ClientId
+                WHERE afr.ApplicationId = @id
+            `);
 
-        if (currentAppointment.recordset.length === 0) {
+        if (appointmentInfo.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
                 error: 'Запись не найдена'
             });
         }
 
-        const oldStatus = currentAppointment.recordset[0].Status;
+        const appointment = appointmentInfo.recordset[0];
+        const oldStatus = appointment.Status;
 
         // Обновляем статус
         const result = await pool.request()
@@ -322,6 +407,23 @@ export const updateAppointmentStatus = async (req, res) => {
                 SET Status = @status
                 WHERE ApplicationId = @id
             `);
+
+        // Отправляем email только если статус меняется на "Отменено"
+        let emailSent = false;
+        if (status === 'Отменено' && appointment.ClientEmail) {
+            try {
+                const clientName = `${appointment.ClientSurname} ${appointment.ClientName} ${appointment.ClientPatronymic || ''}`.trim();
+                emailSent = await sendCancellationEmail(
+                    appointment.ClientEmail,
+                    clientName,
+                    id,
+                    appointment.ApplicationDate
+                );
+                console.log(`✅ Уведомление об отмене отправлено на ${appointment.ClientEmail}`);
+            } catch (emailError) {
+                console.error('❌ Ошибка отправки email:', emailError.message);
+            }
+        }
 
         if (result.rowsAffected[0] === 0) {
             return res.status(404).json({
@@ -334,9 +436,12 @@ export const updateAppointmentStatus = async (req, res) => {
 
         res.json({
             success: true,
-            message: `Статус записи изменён на "${status}"`,
+            message: emailSent 
+                ? `Статус записи изменён на "${status}". Клиент уведомлён.`
+                : `Статус записи изменён на "${status}"`,
             oldStatus: oldStatus,
-            newStatus: status
+            newStatus: status,
+            emailSent: emailSent
         });
 
     } catch (error) {
