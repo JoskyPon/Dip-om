@@ -176,12 +176,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const recordButton = document.querySelector('#record-btn')
 
-     if (!recordButton) {
+    if (!recordButton) {
         console.error('❌ Кнопка с id="record-btn" не найдена!');
         return;
     }
 
-      console.log('✅ Кнопка найдена:', recordButton);
+    console.log('✅ Кнопка найдена:', recordButton);
 
     // Обработчик изменения даты
     document.getElementById('appointment-date').addEventListener('change', function (e) {
@@ -350,8 +350,6 @@ document.addEventListener('DOMContentLoaded', function () {
             itemError[13].style.cssText = 'margin-bottom: 0'
         }
 
-        
-
         const token = localStorage.getItem('token');
 
         try {
@@ -398,27 +396,27 @@ document.addEventListener('DOMContentLoaded', function () {
     recordButton.addEventListener('click', function (e) {
         e.preventDefault();
         console.log('🖱️ Кнопка нажата!');
-        
+
         const timeSelect = document.getElementById('appointment-time');
-        
+
         if (!timeSelect) {
             console.error('❌ Элемент appointment-time не найден');
             alert('Ошибка: не найден элемент выбора времени');
             return;
         }
-        
+
         console.log('timeSelect.value:', timeSelect.value);
-        
+
         if (timeSelect.value === '1' || timeSelect.value === 'Нет свободного времени') {
             alert('Пожалуйста, выберите доступное время');
             return;
         }
-        
+
         const date = document.getElementById('appointment-date').value;
         const time = timeSelect.value;
         const appointmentDateTime = `${date}T${time}:00`;
         console.log('Выбрано время для отправки:', appointmentDateTime);
-        
+
         recordUser(appointmentDateTime);
     })
 })

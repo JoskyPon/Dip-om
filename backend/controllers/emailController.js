@@ -30,7 +30,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Проверка подключения при старте
-transporter.verify(function(error, success) {
+transporter.verify(function (error, success) {
     if (error) {
         console.error('❌ Ошибка подключения к SMTP серверу:', error.message);
     } else {
@@ -42,11 +42,11 @@ transporter.verify(function(error, success) {
 export const sendPolicyEmail = async (req, res) => {
     try {
         const { applicationId } = req.params;
-        
+
         console.log('📧 Отправка email для заявки:', applicationId);
-        
+
         const pool = await connectDB();
-        
+
         // Получаем данные для письма
         const result = await pool.request()
             .input('appId', sql.Int, applicationId)
@@ -70,29 +70,29 @@ export const sendPolicyEmail = async (req, res) => {
                 LEFT JOIN Vehicle v ON afr.RegistrationNumber = v.RegistrationNumber
                 WHERE afr.ApplicationId = @appId
             `);
-        
+
         if (result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
                 error: 'Полис не найден'
             });
         }
-        
+
         const data = result.recordset[0];
-        
+
         if (!data.ClientEmail) {
             return res.status(400).json({
                 success: false,
                 error: 'У клиента не указан email'
             });
         }
-        
+
         console.log('📧 Отправка на email:', data.ClientEmail);
-        
+
         // Форматируем даты
         const startDate = new Date(data.StartDate).toLocaleDateString('ru-RU');
         const endDate = new Date(data.EndDate).toLocaleDateString('ru-RU');
-        
+
         // Формируем HTML письма
         const emailHtml = `
             <!DOCTYPE html>
@@ -143,7 +143,7 @@ export const sendPolicyEmail = async (req, res) => {
             </body>
             </html>
         `;
-        
+
         // Настройки письма
         const mailOptions = {
             from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
@@ -152,14 +152,14 @@ export const sendPolicyEmail = async (req, res) => {
             html: emailHtml,
             text: `Ваш страховой полис №${data.PolicyNumber} оформлен. Детали в письме.`
         };
-        
+
         console.log('📧 Отправка письма...');
-        
+
         // Отправляем email
         const info = await transporter.sendMail(mailOptions);
-        
+
         console.log('✅ Email отправлен:', info.messageId);
-        
+
         // Сохраняем информацию об отправке
         await pool.request()
             .input('appId', sql.Int, applicationId)
@@ -172,7 +172,7 @@ export const sendPolicyEmail = async (req, res) => {
                     (ApplicationId, PolicyNumber, SentTo, SentAt, EmailContent, Status)
                 VALUES (@appId, @policyNumber, @sentTo, GETDATE(), @emailContent, @status)
             `);
-        
+
         // Обновляем статус отправки
         await pool.request()
             .input('appId', sql.Int, applicationId)
@@ -182,17 +182,17 @@ export const sendPolicyEmail = async (req, res) => {
                 SET PolicySentAt = @sentAt
                 WHERE ApplicationId = @appId
             `);
-        
+
         res.json({
             success: true,
             message: 'Полис отправлен на email',
             email: data.ClientEmail,
             messageId: info.messageId
         });
-        
+
     } catch (error) {
         console.error('❌ Ошибка отправки email:', error);
-        
+
         res.status(500).json({
             success: false,
             error: 'Ошибка при отправке email: ' + error.message

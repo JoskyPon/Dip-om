@@ -1,4 +1,3 @@
-// frontend/js/admin.js
 const API_URL = 'http://localhost:3001/api';
 
 // Проверка авторизации и прав администратора
@@ -512,11 +511,11 @@ function renderDocumentsForVerification(applications) {
             default: productName = 'ОСАГО';
         }
 
-                // Информация об автомобиле
-                const vehicleInfo = document.createElement('div');
-                vehicleInfo.className = 'vehicle-info';
-                vehicleInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
-                vehicleInfo.innerHTML = `
+        // Информация об автомобиле
+        const vehicleInfo = document.createElement('div');
+        vehicleInfo.className = 'vehicle-info';
+        vehicleInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
+        vehicleInfo.innerHTML = `
             <h4 style="margin-top: 0; margin-bottom: 10px; color: #667eea;">Автомобиль</h4>
             <p><strong>Госномер:</strong> ${app.vehicle?.registrationNumber || '—'}</p>
             <p><strong>Марка/Модель:</strong> ${app.vehicle?.brand || '—'} ${app.vehicle?.model || '—'}</p>
@@ -525,65 +524,65 @@ function renderDocumentsForVerification(applications) {
             <p><strong>Тип полиса:</strong> ${productName}</p>
         `;
 
-                // Документы
-                const documentsInfo = document.createElement('div');
-                documentsInfo.className = 'documents-info';
-                documentsInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
+        // Документы
+        const documentsInfo = document.createElement('div');
+        documentsInfo.className = 'documents-info';
+        documentsInfo.style.cssText = 'background: #fafafa; padding: 15px; border-radius: 8px;';
 
-                let documentsHtml = '<h4 style="margin-top: 0; margin-bottom: 10px; color: #667eea;">Документы для проверки</h4><div class="documents-grid">';
+        let documentsHtml = '<h4 style="margin-top: 0; margin-bottom: 10px; color: #667eea;">Документы для проверки</h4><div class="documents-grid">';
 
-                documentsHtml += app.documents?.passport
-                    ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
+        documentsHtml += app.documents?.passport
+            ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
                 <span>📄 Паспорт</span>
                 <a href="http://localhost:3001${app.documents.passport.path}" target="_blank" style="color: #3498db; text-decoration: none;">Просмотреть</a>
                </div>`
-                    : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ Паспорт не загружен</div>';
+            : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ Паспорт не загружен</div>';
 
-                documentsHtml += app.documents?.driverLicense
-                    ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
+        documentsHtml += app.documents?.driverLicense
+            ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
                 <span>🚗 Водительское удостоверение</span>
                 <a href="http://localhost:3001${app.documents.driverLicense.path}" target="_blank" style="color: #3498db; text-decoration: none;">Просмотреть</a>
                </div>`
-                    : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ ВУ не загружено</div>';
+            : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ ВУ не загружено</div>';
 
-                documentsHtml += app.documents?.sts
-                    ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
+        documentsHtml += app.documents?.sts
+            ? `<div class="document-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 5px; margin-bottom: 5px;">
                 <span>📋 СТС</span>
                 <a href="http://localhost:3001${app.documents.sts.path}" target="_blank" style="color: #3498db; text-decoration: none;">Просмотреть</a>
                </div>`
-                    : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ СТС не загружен</div>';
+            : '<div class="document-item missing" style="color: #e74c3c; padding: 8px;">❌ СТС не загружен</div>';
 
-                documentsHtml += '</div>';
-                documentsInfo.innerHTML = documentsHtml;
+        documentsHtml += '</div>';
+        documentsInfo.innerHTML = documentsHtml;
 
-                cardBody.appendChild(clientInfo);
-                cardBody.appendChild(vehicleInfo);
-                cardBody.appendChild(documentsInfo);
+        cardBody.appendChild(clientInfo);
+        cardBody.appendChild(vehicleInfo);
+        cardBody.appendChild(documentsInfo);
 
-                // Кнопки действий
-                const cardActions = document.createElement('div');
-                cardActions.className = 'card-actions';
-                cardActions.style.cssText = 'padding: 15px 20px; background: #f8f9fa; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; justify-content: flex-end;';
+        // Кнопки действий
+        const cardActions = document.createElement('div');
+        cardActions.className = 'card-actions';
+        cardActions.style.cssText = 'padding: 15px 20px; background: #f8f9fa; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; justify-content: flex-end;';
 
-                const verifyBtn = document.createElement('button');
-                verifyBtn.textContent = '✅ Подтвердить и создать полис';
-                verifyBtn.style.cssText = 'background: #2ecc71; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
-                verifyBtn.onclick = () => verifyDocuments(app.applicationId, true);
+        const verifyBtn = document.createElement('button');
+        verifyBtn.textContent = '✅ Подтвердить и создать полис';
+        verifyBtn.style.cssText = 'background: #2ecc71; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
+        verifyBtn.onclick = () => verifyDocuments(app.applicationId, true);
 
-                const rejectBtn = document.createElement('button');
-                rejectBtn.textContent = '❌ Отклонить';
-                rejectBtn.style.cssText = 'background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
-                rejectBtn.onclick = () => verifyDocuments(app.applicationId, false);
+        const rejectBtn = document.createElement('button');
+        rejectBtn.textContent = '❌ Отклонить';
+        rejectBtn.style.cssText = 'background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;';
+        rejectBtn.onclick = () => verifyDocuments(app.applicationId, false);
 
-                cardActions.appendChild(verifyBtn);
-                cardActions.appendChild(rejectBtn);
+        cardActions.appendChild(verifyBtn);
+        cardActions.appendChild(rejectBtn);
 
-                card.appendChild(cardHeader);
-                card.appendChild(cardBody);
-                card.appendChild(cardActions);
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        card.appendChild(cardActions);
 
-                container.appendChild(card);
-        });
+        container.appendChild(card);
+    });
 
     console.log('✅ Рендеринг завершён, добавлено карточек:', applications.length);
 }

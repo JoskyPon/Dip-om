@@ -83,7 +83,7 @@ export const createAppointment = async (req, res) => {
     console.log('📥 ПОЛУЧЕН POST ЗАПРОС /api/appointments');
     console.log('📥 req.body:', req.body);
     console.log('📥 req.user:', req.user);
-    
+
     try {
         const {
             passport,
@@ -113,7 +113,7 @@ export const createAppointment = async (req, res) => {
         }
 
         const pool = await connectDB();
-        
+
         // УПРОЩЁННО: Сначала сохраняем автомобиль (если его нет)
         const existingVehicle = await pool.request()
             .input('carRegistrationNumber', sql.NVarChar, carRegistrationNumber)

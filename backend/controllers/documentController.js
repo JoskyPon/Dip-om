@@ -1,7 +1,5 @@
-// backend/controllers/documentController.js
 import sql from 'mssql';
 import { connectDB } from '../config/db.js';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { sendPolicyEmail } from './emailController.js';
@@ -419,7 +417,7 @@ export const getDocumentsForVerification = async (req, res) => {
 async function sendRejectionEmail(clientEmail, clientName, applicationId) {
     try {
         console.log(`📧 Отправка уведомления об отказе на ${clientEmail}...`);
-        
+
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
             port: parseInt(process.env.EMAIL_PORT),
@@ -436,7 +434,7 @@ async function sendRejectionEmail(clientEmail, clientName, applicationId) {
             socketTimeout: 15000,
             debug: false
         });
-        
+
         const mailOptions = {
             from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
             to: clientEmail,
@@ -478,11 +476,11 @@ async function sendRejectionEmail(clientEmail, clientName, applicationId) {
                 </html>
             `
         };
-        
+
         const info = await transporter.sendMail(mailOptions);
         console.log(`✅ Уведомление об отказе отправлено на ${clientEmail}, ID: ${info.messageId}`);
         return true;
-        
+
     } catch (error) {
         console.error(`❌ Ошибка отправки уведомления об отказе:`, error.message);
         return false;
@@ -593,7 +591,7 @@ export const verifyDocumentsAndCreatePolicy = async (req, res) => {
                     WHERE ApplicationId = @appId
                 `);
 
-                let emailSent = false;
+            let emailSent = false;
             if (app.ClientEmail) {
                 const clientName = `${app.ClientSurname} ${app.ClientName} ${app.ClientPatronymic || ''}`.trim();
                 emailSent = await sendRejectionEmail(app.ClientEmail, clientName, applicationId);
@@ -601,7 +599,7 @@ export const verifyDocumentsAndCreatePolicy = async (req, res) => {
 
             return res.json({
                 success: true,
-                message: emailSent 
+                message: emailSent
                     ? 'Документы отклонены. Уведомление отправлено клиенту.'
                     : 'Документы отклонены, но email не отправлен',
                 emailSent: emailSent

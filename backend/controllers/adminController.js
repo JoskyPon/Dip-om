@@ -1,4 +1,3 @@
-// backend/controllers/adminController.js
 import sql from 'mssql';
 import { connectDB } from '../config/db.js';
 
@@ -286,10 +285,10 @@ export const searchUsers = async (req, res) => {
 async function sendCancellationEmail(clientEmail, clientName, applicationId, appointmentDate) {
     try {
         console.log(`📧 Отправка уведомления об отмене записи на ${clientEmail}...`);
-        
+
         // Динамический импорт nodemailer
         const nodemailer = await import('nodemailer');
-        
+
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
             port: parseInt(process.env.EMAIL_PORT),
@@ -303,9 +302,9 @@ async function sendCancellationEmail(clientEmail, clientName, applicationId, app
             greetingTimeout: 10000,
             socketTimeout: 15000
         });
-        
+
         const formattedDate = appointmentDate ? new Date(appointmentDate).toLocaleString('ru-RU') : 'не указана';
-        
+
         const mailOptions = {
             from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
             to: clientEmail,
@@ -344,11 +343,11 @@ async function sendCancellationEmail(clientEmail, clientName, applicationId, app
                 </html>
             `
         };
-        
+
         const info = await transporter.sendMail(mailOptions);
         console.log(`✅ Уведомление об отмене отправлено на ${clientEmail}, ID: ${info.messageId}`);
         return true;
-        
+
     } catch (error) {
         console.error(`❌ Ошибка отправки уведомления об отмене:`, error.message);
         return false;
@@ -436,7 +435,7 @@ export const updateAppointmentStatus = async (req, res) => {
 
         res.json({
             success: true,
-            message: emailSent 
+            message: emailSent
                 ? `Статус записи изменён на "${status}". Клиент уведомлён.`
                 : `Статус записи изменён на "${status}"`,
             oldStatus: oldStatus,
