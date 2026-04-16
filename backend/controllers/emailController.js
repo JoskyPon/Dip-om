@@ -114,7 +114,7 @@ export const sendPolicyEmail = async (req, res) => {
                 <div class="container">
                     <div class="header">
                         <h2>Страховой полис</h2>
-                        <p>АвтоСтрах</p>
+                        <p>ИП НОВИКОВ К.В.</p>
                     </div>
                     <div class="content">
                         <p>Уважаемый(ая) <strong>${data.ClientSurname} ${data.ClientName} ${data.ClientPatronymic || ''}</strong>!</p>
@@ -136,7 +136,7 @@ export const sendPolicyEmail = async (req, res) => {
                         <p>Вы всегда можете скачать электронную версию полиса в вашем личном кабинете.</p>
                     </div>
                     <div class="footer">
-                        <p>© ${new Date().getFullYear()} АвтоСтрах. Все права защищены.</p>
+                        <p>© ${new Date().getFullYear()} ИП НОВИКОВ К.В. Все права защищены.</p>
                         <p>Это письмо сформировано автоматически, пожалуйста, не отвечайте на него.</p>
                     </div>
                 </div>
@@ -146,7 +146,7 @@ export const sendPolicyEmail = async (req, res) => {
 
         // Настройки письма
         const mailOptions = {
-            from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
+            from: `"ИП НОВИКОВ К.В." <${process.env.EMAIL_USER}>`,
             to: data.ClientEmail,
             subject: `Ваш страховой полис №${data.PolicyNumber}`,
             html: emailHtml,

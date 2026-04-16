@@ -306,7 +306,7 @@ async function sendCancellationEmail(clientEmail, clientName, applicationId, app
         const formattedDate = appointmentDate ? new Date(appointmentDate).toLocaleString('ru-RU') : 'не указана';
 
         const mailOptions = {
-            from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
+            from: `"ИП НОВИКОВ К.В." <${process.env.EMAIL_USER}>`,
             to: clientEmail,
             subject: `❌ Отмена записи на приём`,
             html: `
@@ -333,7 +333,7 @@ async function sendCancellationEmail(clientEmail, clientName, applicationId, app
                             <p>Ваша запись на приём №${applicationId} отменена.</p>
                             <p><strong>Дата записи:</strong> ${formattedDate}</p>
                             <p>Вы можете записаться повторно через личный кабинет.</p>
-                            <p>С уважением,<br>Команда АвтоСтрах</p>
+                            <p>С уважением,<br>Команда ИП НОВИКОВ К.В.</p>
                         </div>
                         <div class="footer">
                             <p>Это автоматическое сообщение, пожалуйста, не отвечайте на него.</p>
@@ -350,6 +350,78 @@ async function sendCancellationEmail(clientEmail, clientName, applicationId, app
 
     } catch (error) {
         console.error(`❌ Ошибка отправки уведомления об отмене:`, error.message);
+        return false;
+    }
+}
+
+async function sendConfirmEmail(clientEmail, clientName, applicationId, appointmentDate) {
+    try {
+        console.log(`📧 Отправка уведомления о подтверждении записи на ${clientEmail}...`);
+
+        // Динамический импорт nodemailer
+        const nodemailer = await import('nodemailer');
+
+        const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: process.env.EMAIL_PORT == '465',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD
+            },
+            tls: { rejectUnauthorized: false },
+            connectionTimeout: 10000,
+            greetingTimeout: 10000,
+            socketTimeout: 15000
+        });
+
+        const formattedDate = appointmentDate ? new Date(appointmentDate).toLocaleString('ru-RU') : 'не указана';
+
+        const mailOptions = {
+            from: `"ИП НОВИКОВ К.В." <${process.env.EMAIL_USER}>`,
+            to: clientEmail,
+            subject: `Подтверждение записи на приём`,
+            html: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Подтверждение записи</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+                        .header { background: #44d156; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { padding: 20px; }
+                        .footer { text-align: center; padding: 15px; font-size: 12px; color: #666; border-top: 1px solid #ddd; margin-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2>Подтверждение записи на приём</h2>
+                        </div>
+                        <div class="content">
+                            <p>Уважаемый(ая) <strong>${clientName}</strong>!</p>
+                            <p>Ваша запись на приём №${applicationId} подтверждена.</p>
+                            <p><strong>Дата записи:</strong> ${formattedDate}</p>
+                            <p>Ждем вас в офисе по адресу: с.Левокумское, ул. Калинина, д. 86, кв. 1</p>
+                            <p>С уважением,<br>Команда ИП НОВИКОВ К.В.</p>
+                        </div>
+                        <div class="footer">
+                            <p>Это автоматическое сообщение, пожалуйста, не отвечайте на него.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`✅ Уведомление о подтверждении отправлено на ${clientEmail}, ID: ${info.messageId}`);
+        return true;
+
+    } catch (error) {
+        console.error(`❌ Ошибка отправки уведомления о подтверждении:`, error.message);
         return false;
     }
 }
@@ -407,7 +479,7 @@ export const updateAppointmentStatus = async (req, res) => {
                 WHERE ApplicationId = @id
             `);
 
-        // Отправляем email только если статус меняется на "Отменено"
+        // Отправляем email если статус меняется на "Отменено"
         let emailSent = false;
         if (status === 'Отменено' && appointment.ClientEmail) {
             try {
@@ -419,6 +491,21 @@ export const updateAppointmentStatus = async (req, res) => {
                     appointment.ApplicationDate
                 );
                 console.log(`✅ Уведомление об отмене отправлено на ${appointment.ClientEmail}`);
+            } catch (emailError) {
+                console.error('❌ Ошибка отправки email:', emailError.message);
+            }
+        }
+        // Отправляем email если статус меняется на "Завершено"
+        if (status === 'Завершено' && appointment.ClientEmail) {
+            try {
+                const clientName = `${appointment.ClientSurname} ${appointment.ClientName} ${appointment.ClientPatronymic || ''}`.trim();
+                emailSent = await sendConfirmEmail(
+                    appointment.ClientEmail,
+                    clientName,
+                    id,
+                    appointment.ApplicationDate
+                );
+                console.log(`✅ Уведомление о подтверждении записи отправлено на ${appointment.ClientEmail}`);
             } catch (emailError) {
                 console.error('❌ Ошибка отправки email:', emailError.message);
             }

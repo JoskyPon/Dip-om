@@ -436,7 +436,7 @@ async function sendRejectionEmail(clientEmail, clientName, applicationId) {
         });
 
         const mailOptions = {
-            from: `"АвтоСтрах" <${process.env.EMAIL_USER}>`,
+            from: `"ИП НОВИКОВ К.В." <${process.env.EMAIL_USER}>`,
             to: clientEmail,
             subject: `❌ Отказ в оформлении страхового полиса`,
             html: `
@@ -466,7 +466,7 @@ async function sendRejectionEmail(clientEmail, clientName, applicationId) {
                                 ❌ ОТКАЗАНО
                             </div>
                             <p>Вы можете подать новую заявку через личный кабинет.</p>
-                            <p>С уважением,<br>Команда АвтоСтрах</p>
+                            <p>С уважением,<br>Команда ИП НОВИКОВ К.В.</p>
                         </div>
                         <div class="footer">
                             <p>Это автоматическое сообщение, пожалуйста, не отвечайте на него.</p>
