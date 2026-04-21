@@ -200,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitBtn = document.getElementById('record-btn');
 
     if (!submitBtn) {
-        console.error('Кнопка отправки не найдена');
         return;
     }
 
@@ -229,13 +228,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const carSTS = document.getElementById('car-STS')?.value.trim();
         const carPower = document.getElementById('car-power')?.value;
         const appointmentPolicy = document.querySelector('#appointment-policy').value
-
-        // Проверка обязательных полей
-        if (!passport || !passportDate || !issuedBy || !driverLicense || !driverLicenseDate ||
-            !carRegistrationNumber || !carVIN || !carBrand || !carModel || !carDate || !carSTS) {
-            alert('Пожалуйста, заполните все поля формы');
-            return;
-        }
 
         // Сбор категорий
         const categories = [];
@@ -277,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.textContent = 'Отправка...';
 
         try {
-            console.log('📤 Отправка документов...');
 
             const response = await fetch(`${API_URL}/documents/upload`, {
                 method: 'POST',
@@ -288,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             const data = await response.json();
-            console.log('📥 Ответ сервера:', data);
 
             if (data.success) {
                 alert(`✅ ${data.message}\nНомер заявки: ${data.applicationId}`);
@@ -297,7 +287,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert(`❌ Ошибка: ${data.error}`);
             }
         } catch (error) {
-            console.error('❌ Ошибка:', error);
             alert('❌ Ошибка соединения с сервером');
         } finally {
             submitBtn.disabled = false;
@@ -323,125 +312,16 @@ document.addEventListener('DOMContentLoaded', function () {
             const carPower = document.querySelector('#car-power').value.trim()
             const itemError = document.querySelectorAll('.input__error')
 
-            if (!passport) {
-                itemError[0].innerHTML = 'Поле не может быть пустым'
-            } else if (passport.length !== 10) {
-                itemError[0].innerHTML = 'Серия и номер паспорта должны состоять из 10 цифр'
-            } else {
-                itemError[0].innerHTML = ''
-            }
-
-            //валидация даты выдачи паспорта
-            if (!passportDate) {
-                itemError[1].innerHTML = 'Поле не может быть пустым'
-            } else {
-                itemError[1].innerHTML = ''
-            }
-
-            if (!issuedBy) {
-                itemError[2].innerHTML = 'Поле не может быть пустым'
-            } else {
-                itemError[2].innerHTML = ''
-            }
-
-            //валидация номера ВУ
-            if (!driverLicense) {
-                itemError[3].innerHTML = 'Поле не может быть пустым'
-            } else if (driverLicense.length !== 10) {
-                itemError[3].innerHTML = 'Серия и номер паспорта должны состоять из 10 цифр'
-            } else {
-                itemError[3].innerHTML = ''
-            }
-
-            //Валидация даты выдачи ВУ
-            if (!driverLicenseDate) {
-                itemError[4].innerHTML = 'Поле не может быть пустым'
-            } else {
-                itemError[4].innerHTML = ''
-            }
+            validateForm()
 
             const checkboxes = document.querySelectorAll('.checkbox__input')
             const selectedCategories = []
-
-            console.log(selectedCategories)
 
             checkboxes.forEach(checkbox => {
                 if (checkbox.checked) {
                     selectedCategories.push(checkbox.value);
                 }
             });
-
-            //Валидация выбранных категорий
-            if (selectedCategories.length === 0) {
-                itemError[5].innerHTML = 'Поле не может быть пустым'
-            } else {
-                itemError[5].innerHTML = ''
-            }
-
-            //Валидация регистрационного номера
-            if (!carRegistrationNumber) {
-                itemError[6].innerHTML = 'Поле не может быть пустым'
-            } else if (carRegistrationNumber.length < 8 || carRegistrationNumber.length > 9) {
-                itemError[6].innerHTML = 'Номер должен содержать от 8 до 9 символов'
-            } else {
-                itemError[6].innerHTML = ''
-            }
-
-            //Валидация VIN-номера
-            if (!carVIN) {
-                itemError[7].innerHTML = 'Поле не может быть пустым'
-            } else if (carVIN.length !== 17) {
-                itemError[7].innerHTML = 'Номер должен состоять из 17 символов'
-            } else {
-                itemError[7].innerHTML = ''
-            }
-
-            //Валидация марки автомобиля
-            if (!carBrand) {
-                itemError[8].innerHTML = 'Поле не может быть пустым'
-            } else {
-                itemError[8].innerHTML = ''
-            }
-
-            //Валидация модели автомобиля
-            if (!carModel) {
-                itemError[9].innerHTML = 'Поле не может быть пустым'
-            } else {
-                itemError[9].innerHTML = ''
-            }
-
-            //Валидация года выпуска автомобиля
-            if (!carDate) {
-                itemError[10].innerHTML = 'Поле не может быть пустым'
-            } else {
-                itemError[10].innerHTML = ''
-            }
-
-            //Валидация номера СТС
-            if (!carSTS) {
-                itemError[11].innerHTML = 'Поле не может быть пустым'
-            } else if (carSTS.length !== 10) {
-                itemError[11].innerHTML = 'Номер должен состоять из 10 символов'
-            } else {
-                itemError[11].innerHTML = ''
-            }
-
-            //Валидация мощности двигателя
-            if (!carPower) {
-                itemError[12].innerHTML = 'Поле не может быть пустым'
-            } else if (carPower > 1500) {
-                itemError[12].innerHTML = 'Введите настоящую мощность'
-            } else {
-                itemError[12].innerHTML = ''
-            }
-
-            //Прерывание отправки формы если есть хотя бы одна ошибка
-            for (let i = 0; i <= 13; i++) {
-                console.log(itemError[i])
-                if (itemError[i] !== '') {
-                    return
-                }
-            }
         });
     }
 });

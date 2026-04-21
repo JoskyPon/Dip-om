@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const expGroup = getExperienceGroup(experience.value);
 
         if (!ageGroup || !expGroup) {
-            console.error("Некорректные данные: возраст или стаж вне диапазона.");
             return null; // или вернуть значение по умолчанию, например 1.0
         }
 
@@ -124,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (kvsTable[ageGroup] && kvsTable[ageGroup][expGroup] !== undefined) {
             return kvsTable[ageGroup][expGroup];
         } else {
-            console.error(`Для возраста ${age} и стажа ${experience} лет коэффициент не определен.`);
             return null;
         }
     }
@@ -137,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let calcKM = calculatedKM(KM)
         let calcKS = calculatedKS(KS)
         let caclCOST = calculatedCOST(COST)
-        console.log(calculatedCOST(COST))
         let finalCostCASCO = Math.round((baseCost * calcKT * calcKBM * calcKVS * calcKM * calcKO * calcKS) + caclCOST)
         let finalCostOSAGO = Math.round(baseCost * calcKT * calcKBM * calcKVS * calcKM * calcKO * calcKS)
 

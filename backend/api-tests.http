@@ -1,0 +1,124 @@
+@baseUrl = http://localhost:3001/api
+@contentType = application/json
+
+
+### Регистрация нового клиента
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "surname": "Тестов",
+  "name": "Тест",
+  "patronymic": "Тестович",
+  "phoneNumber": "89281112233",
+  "regEmail": "testclient@example.com",
+  "regPassword": "password123"
+}
+
+### Логин (получаем JWT токен)
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "login": "podg.sanek@gmail.com",
+  "password": "335567"
+}
+
+### Сохраняем токен из ответа (для последующих запросов)
+@authToken = {{login.response.body.token}}
+
+
+### Получить данные для дашборда (личный кабинет)
+GET {{baseUrl}}/users/dashboard
+Authorization: Bearer {{authToken}}
+
+
+### Проверка доступного времени (перед созданием заявки)
+GET {{baseUrl}}/appointments/check-time?date=2026-05-10
+Authorization: Bearer {{authToken}}
+
+### Создание заявки на полис (запись на приём)
+POST {{baseUrl}}/appointments
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "passport": 1234567890,
+  "passportDate": "2020-01-01",
+  "passportIssuedBy": "ОВД г. Москвы",
+  "driverLicense": 9876543210,
+  "driverLicenseDate": "2021-01-01",
+  "driverLicenseCategories": ["B", "C"],
+  "carRegistrationNumber": "А123ВС777",
+  "carVIN": "XTA12345678901234",
+  "carBrand": "Lada",
+  "carModel": "Vesta",
+  "carDate": 2020,
+  "carSTS": "1234567890",
+  "carPower": 106,
+  "dateOfVisit": "2026-05-10T11:30:00",
+  "appointmentPolicy": 1
+}
+
+### Логин администратора (предварительно нужно назначить роль admin в БД)
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "login": "admin@mail.ru",
+  "password": "admin1"
+}
+
+### Сохраняем токен администратора
+@adminToken = {{adminLogin.response.body.token}}
+
+### Статистика (админ)
+GET {{baseUrl}}/admin/stats
+Authorization: Bearer {{adminToken}}
+
+### Список заявок на верификацию документов
+GET {{baseUrl}}/documents/pending-verification
+Authorization: Bearer {{adminToken}}
+
+### Список всех заявок с фильтрацией (админ)
+GET {{baseUrl}}/admin/appointments?status=Ожидание&startDate=2026-04-01&endDate=2026-04-30
+Authorization: Bearer {{adminToken}}
+
+### Поиск пользователей по ФИО (админ)
+GET {{baseUrl}}/admin/users/search?query=Тестов
+Authorization: Bearer {{adminToken}}
+
+### Подтверждение заявки и создание полиса (замените 1 на реальный applicationId)
+PUT {{baseUrl}}/documents/verify/1
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "isVerified": true
+}
+
+### Отклонение заявки
+PUT {{baseUrl}}/documents/verify/11
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "isVerified": false
+}
+
+### Отмена записи на приём (админ) - изменить статус на "Отменено"
+PUT {{baseUrl}}/admin/appointments/1/status
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "status": "Отменено"
+}
+
+GET {{baseUrl}}/appointments/my
+Authorization: Bearer {{authToken}}
+
+
+GET {{baseUrl}}/test

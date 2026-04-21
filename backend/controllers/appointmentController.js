@@ -214,6 +214,15 @@ export const checkAvailableTime = async (req, res) => {
             });
         }
 
+        if (checkLastAppointment()) {
+        } else {
+            res.status(500).json({
+            success: false,
+            error: 'Есть запись в ближайшие 24 часа'
+        });
+        }
+        
+
         // ПРОВЕРКА НА ВЫХОДНОЙ ДЕНЬ
         const selectedDate = new Date(date);
         const dayOfWeek = selectedDate.getDay(); // 0 - воскресенье, 6 - суббота

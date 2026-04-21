@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
         } catch (e) {
-            console.error('Ошибка проверки токена:', e);
         }
 
         // Если авторизован - показываем форму
@@ -81,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Функция проверки доступного времени
     async function checkAvailableTime(selectedDate) {
-        console.log('Проверка доступного времени для даты:', selectedDate);
 
         // Показываем индикатор загрузки
         const timeSelect = document.getElementById('appointment-time');
@@ -102,23 +100,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const response = await fetch(`${API_URL}/appointments/check-time?date=${selectedDate}`);
             const data = await response.json();
 
-            console.log('📥 Ответ сервера:', data);
-
             if (data.success) {
                 // Отображаем доступное время
                 displayAvailableTimes(data.availableTimes);
 
                 // Если есть занятое время, показываем предупреждение
                 if (data.busyTimes && data.busyTimes.length > 0) {
-                    console.log('Занятое время:', data.busyTimes);
                 }
             } else {
-                console.error('Ошибка от сервера:', data.error);
                 timeSelect.innerHTML = '<option value="1">Ошибка загрузки</option>';
                 loadingElement.style.display = 'none';
             }
         } catch (error) {
-            console.error('Ошибка проверки времени:', error);
             timeSelect.innerHTML = '<option value="1">Ошибка соединения</option>';
             const loadingElement = document.getElementById('time-loading');
             if (loadingElement) loadingElement.style.display = 'none';
@@ -177,16 +170,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const recordButton = document.querySelector('#record-btn')
 
     if (!recordButton) {
-        console.error('❌ Кнопка с id="record-btn" не найдена!');
         return;
     }
-
-    console.log('✅ Кнопка найдена:', recordButton);
 
     // Обработчик изменения даты
     document.getElementById('appointment-date').addEventListener('change', function (e) {
         const selectedDate = e.target.value;
-        console.log('Выбрана дата:', selectedDate);
 
         // Проверяем, не выходной ли это день
         const weekend = isWeekend(selectedDate);
@@ -225,8 +214,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const appointmentPolicy = document.querySelector('#appointment-policy').value
 
         const itemError = document.querySelectorAll('.input__error')
-
-        console.log(passportDate)
 
         //Валидация серии номера паспорта
         if (!passport) {
@@ -268,8 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const checkboxes = document.querySelectorAll('.checkbox__input')
         const selectedCategories = []
-
-        console.log(selectedCategories)
 
         checkboxes.forEach(checkbox => {
             if (checkbox.checked) {
@@ -388,24 +373,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             console.log(data);
         } catch (error) {
-            console.error('Ошибка:', error);
             alert('Произошла ошибка при отправке данных');
         }
     }
 
     recordButton.addEventListener('click', function (e) {
         e.preventDefault();
-        console.log('🖱️ Кнопка нажата!');
 
         const timeSelect = document.getElementById('appointment-time');
 
         if (!timeSelect) {
-            console.error('❌ Элемент appointment-time не найден');
             alert('Ошибка: не найден элемент выбора времени');
             return;
         }
-
-        console.log('timeSelect.value:', timeSelect.value);
 
         if (timeSelect.value === '1' || timeSelect.value === 'Нет свободного времени') {
             alert('Пожалуйста, выберите доступное время');
@@ -415,7 +395,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = document.getElementById('appointment-date').value;
         const time = timeSelect.value;
         const appointmentDateTime = `${date}T${time}:00`;
-        console.log('Выбрано время для отправки:', appointmentDateTime);
 
         recordUser(appointmentDateTime);
     })

@@ -2,11 +2,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const API_URL = 'http://localhost:3001/api';
 
-    console.log('📁 Личный кабинет загружен');
-    console.log('📍 Текущий URL:', window.location.href);
-    console.log('🔑 Токен:', localStorage.getItem('token') ? 'есть' : 'нет');
-    console.log('👤 Пользователь:', localStorage.getItem('user'));
-
     // Элементы DOM
     const userNameElement = document.querySelector('.header__name');
     const logoutBtn = document.getElementById('logout-btn');
@@ -24,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Если нет токена или пользователя - перенаправляем на вход
         if (!token || !userStr) {
-            console.log('⛔ Нет авторизации, перенаправление на login.html');
             window.location.href = '../autentification/autentification.html';
             return false;
         }
@@ -33,8 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Проверяем, не истёк ли токен
             const tokenData = JSON.parse(atob(token.split('.')[1]));
             const exp = tokenData.exp * 1000; // в миллисекундах
-
-            console.log('📅 Токен истекает:', new Date(exp).toLocaleString());
 
             if (Date.now() >= exp) {
                 // Токен истёк
@@ -71,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const token = localStorage.getItem('token');
 
         try {
-            console.log('📤 Загрузка данных кабинета...');
 
             const response = await fetch(`${API_URL}/users/dashboard`, {
                 headers: {
@@ -81,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             const data = await response.json();
-            console.log('📥 Данные кабинета:', data);
 
             if (data.success) {
                 // Обновляем данные пользователя
@@ -95,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderVehicles(data.vehicles);
 
             } else {
-                console.error('❌ Ошибка загрузки:', data.error);
 
                 // Если ошибка авторизации - перенаправляем на вход
                 if (data.error.includes('токен') || data.error.includes('авторизац')) {
@@ -108,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         } catch (error) {
-            console.error('❌ Ошибка загрузки данных:', error);
             showError('Не удалось загрузить данные. Проверьте соединение с сервером.');
         }
     }
@@ -198,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Выход из аккаунта
     function logout() {
-        console.log('🚪 Выход из аккаунта');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '../autentification/autentification.html';

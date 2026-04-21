@@ -28,9 +28,7 @@ const config = {
 export const connectDB = async () => {
     try {
         const pool = await sql.connect(config);
-        console.log('Успешное подключение к SQL Server');
         return pool;
     } catch (err) {
-        console.error('Ошибка подключения:', err);
     }
 };

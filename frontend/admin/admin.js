@@ -24,7 +24,6 @@ async function checkAdminAuth() {
                 return false;
             }
         } catch (error) {
-            console.error('Ошибка проверки прав:', error);
         }
     }
 
@@ -59,7 +58,6 @@ async function loadStats() {
             document.getElementById('stat-upcoming').textContent = data.stats.upcoming || 0;
         }
     } catch (error) {
-        console.error('Ошибка загрузки статистики:', error);
     }
 }
 
@@ -101,7 +99,6 @@ async function loadAppointments(filters = {}) {
             container.innerHTML = `<div class="error-message">❌ ${data.error}</div>`;
         }
     } catch (error) {
-        console.error('Ошибка загрузки записей:', error);
         container.innerHTML = '<div class="error-message">❌ Ошибка соединения с сервером</div>';
     }
 }
@@ -303,7 +300,6 @@ async function showAppointmentDetails(id) {
             modalBody.innerHTML = `<div class="error-message">❌ ${data.error}</div>`;
         }
     } catch (error) {
-        console.error('Ошибка загрузки деталей:', error);
         modalBody.innerHTML = '<div class="error-message">❌ Ошибка соединения с сервером</div>';
     }
 }
@@ -351,7 +347,6 @@ async function searchUsers(query) {
             resultsContainer.innerHTML = `<div class="error-message">❌ ${data.error}</div>`;
         }
     } catch (error) {
-        console.error('Ошибка поиска:', error);
         resultsContainer.innerHTML = '<div class="error-message">❌ Ошибка соединения с сервером</div>';
     }
 }
@@ -391,7 +386,6 @@ async function updateAppointmentStatus(appointmentId, newStatus) {
             return false;
         }
     } catch (error) {
-        console.error('Ошибка изменения статуса:', error);
         alert('❌ Ошибка соединения с сервером');
         return false;
     }
@@ -412,8 +406,6 @@ async function loadDocumentsForVerification() {
     const container = document.getElementById('documents-container');
     container.innerHTML = '<div class="loading">Загрузка заявок...</div>';
 
-    console.log('🔄 Загрузка заявок на верификацию...');
-
     try {
         const response = await fetch(`${API_URL}/documents/pending-verification`, {
             method: 'GET',
@@ -425,28 +417,20 @@ async function loadDocumentsForVerification() {
             }
         });
 
-        console.log('📡 Статус ответа:', response.status);
-
         const data = await response.json();
-        console.log('📥 Данные от сервера:', data);
 
         if (data.success) {
-            console.log(`✅ Найдено заявок: ${data.applications?.length || 0}`);
-            console.log('🎨 Вызов renderDocumentsForVerification с данными:', data.applications);
             renderDocumentsForVerification(data.applications || []);
         } else {
-            console.error('❌ Ошибка сервера:', data.error);
             container.innerHTML = `<div class="error-message">❌ ${data.error}</div>`;
         }
     } catch (error) {
-        console.error('❌ Ошибка запроса:', error);
         container.innerHTML = '<div class="error-message">❌ Ошибка соединения с сервером</div>';
     }
 }
 
 // Отображение заявок на верификацию
 function renderDocumentsForVerification(applications) {
-    console.log('🎨 Рендеринг заявок, получено:', applications.length);
 
     const container = document.querySelector('#documents-container');
 
@@ -583,8 +567,6 @@ function renderDocumentsForVerification(applications) {
 
         container.appendChild(card);
     });
-
-    console.log('✅ Рендеринг завершён, добавлено карточек:', applications.length);
 }
 
 document.querySelectorAll('.reject-btn').forEach(btn => {
@@ -664,13 +646,7 @@ async function sendPolicyEmail(applicationId) {
 
         const data = await response.json();
 
-        if (data.success) {
-            console.log('✅ Email отправлен:', data.email);
-        } else {
-            console.error('❌ Ошибка отправки email:', data.error);
-        }
     } catch (error) {
-        console.error('Ошибка отправки email:', error);
     }
 }
 
@@ -678,8 +654,6 @@ async function sendPolicyEmail(applicationId) {
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const tab = btn.dataset.tab;
-
-        console.log('🔄 Переключение на вкладку:', tab);
 
         // Убираем активный класс у всех кнопок
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -704,17 +678,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (activeTab) {
             activeTab.classList.add('active');
             activeTab.style.display = 'block'; // Явно показываем
-            console.log(`✅ Вкладка ${tab} активирована, display: ${activeTab.style.display}`);
 
             // Загружаем данные для соответствующих вкладок
             if (tab === 'appointments') {
                 loadAppointments();
             } else if (tab === 'documents') {
-                console.log('📄 Загрузка документов...');
                 loadDocumentsForVerification();
             }
-        } else {
-            console.error(`❌ Вкладка ${tab} не найдена`);
         }
     });
 });
@@ -753,13 +723,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             const container = document.getElementById('documents-container');
-            console.log('Содержимое контейнера:', container.innerHTML);
-            console.log('Длина HTML:', container.innerHTML.length);
-            console.log('Контейнер видим?', container.style.display);
-            console.log('Родитель видим?', container.parentElement.style.display);
             const tabr = document.getElementById('tab-documents');
-            console.log('Вкладка имеет класс active?', tabr.classList.contains('active'));
-            console.log('Стиль display вкладки:', window.getComputedStyle(tabr).display);
         });
     });
 
@@ -810,12 +774,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     function initTabs() {
-        console.log('🔧 Инициализация вкладок...');
 
         const tabs = document.querySelectorAll('.tab-btn');
         const contents = document.querySelectorAll('.tab-content');
-
-        console.log(`Найдено кнопок: ${tabs.length}, контентов: ${contents.length}`);
 
         // Скрываем все вкладки
         contents.forEach(content => {
@@ -834,7 +795,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         tabs.forEach(btn => {
             btn.addEventListener('click', () => {
                 const tabName = btn.dataset.tab;
-                console.log(`📌 Клик по вкладке: ${tabName}`);
 
                 // Убираем активность со всех кнопок
                 tabs.forEach(b => b.classList.remove('active'));
@@ -851,7 +811,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (activeContent) {
                     activeContent.style.display = 'block';
                     activeContent.classList.add('active');
-                    console.log(`✅ Показана вкладка: ${tabName}`);
 
                     // Загружаем данные
                     if (tabName === 'appointments') {
@@ -859,17 +818,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     } else if (tabName === 'documents') {
                         loadDocumentsForVerification();
                     }
-                } else {
-                    console.error(`❌ Контент для вкладки ${tabName} не найден`);
                 }
             });
         });
     }
 
-    // Вызовите initTabs после загрузки DOM
     document.addEventListener('DOMContentLoaded', () => {
         initTabs();
-        // ... остальная инициализация
     });
 
     // Выход

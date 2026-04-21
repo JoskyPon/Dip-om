@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
 
             const data = await response.json()
-            console.log(data)
 
             if (data.success) {
                 alert('Регистрация успешна!')
@@ -136,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         } catch (error) {
-            console.error(`Возникла ошибка:`, error)
             alert('Ошибка соединения с сервером')
         }
     }
@@ -176,7 +174,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return
         }
 
-
         try {
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
@@ -187,8 +184,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
 
             const data = await response.json()
-
-            console.log('Ответ сервера:', data)
 
             if (data.success) {
                 alert('Вход выполнен!')
@@ -201,7 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         } catch (error) {
-            console.error('Ошибка:', error)
             alert('Ошибка соединения с сервером')
         }
     }
@@ -235,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return
         }
 
-
         try {
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
@@ -246,8 +239,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
 
             const data = await response.json()
-
-            console.log('Ответ сервера:', data)
 
             if (data.success) {
                 alert('Вход выполнен!')
@@ -260,7 +251,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         } catch (error) {
-            console.error('Ошибка:', error)
             alert('Ошибка соединения с сервером')
         }
     }
@@ -275,7 +265,4 @@ document.addEventListener('DOMContentLoaded', function () {
             loginUser()
         }
     })
-
-
-
 })
