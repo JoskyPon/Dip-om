@@ -98,7 +98,7 @@ header {
 
 .hero__text {
     margin-bottom: 40px;
-    max-width: 300px;
+    max-width: 750px;
 }
 
 .hero__title {
@@ -175,7 +175,7 @@ header {
 
 .about-us__title {
     margin: 0;
-    padding-left: 90px;
+    padding-left: 300px;
     font-family: 'Marxiana';
     font-weight: 400;
     font-size: 32px;
